@@ -1,4 +1,5 @@
 import StarSVG from "@/shared/IconsSvg";
+import "./MovieMetaInfo.css";
 
 type TSearchedItemCard = {
   rating: number;
@@ -6,6 +7,7 @@ type TSearchedItemCard = {
   genre: Array<string>;
   runtime: number;
   fontSize: string;
+  ratingSize: string;
 };
 
 export default function MoviesMetaInfo({
@@ -14,6 +16,7 @@ export default function MoviesMetaInfo({
   releaseYear,
   runtime,
   fontSize,
+  ratingSize,
 }: TSearchedItemCard) {
   function raitingColor(rating: number): string {
     if (rating <= 5) return "bg-[#C82020]";
@@ -24,36 +27,20 @@ export default function MoviesMetaInfo({
   return (
     <div className="flex items-center">
       <div
-        className={`w-[47px] h-[20px] ${raitingColor(
+        className={`${ratingSize} ${raitingColor(
           rating
         )} rounded-2xl ${fontSize} font-bold flex justify-center items-center mr-3`}
       >
         <div className="mr-1">
-          <StarSVG width={9} height={9} />
+          <StarSVG width={12} height={12} />
         </div>
         {rating.toFixed(1)}
       </div>
       <div className={`${fontSize} mr-3`}>{releaseYear}</div>
       <div className="flex mr-3">
         {genre.slice(0, 3).map((item, index) => {
-          if (genre.length > 1) {
-            if (index !== 2) {
-              return (
-                <div key={index} className={`${fontSize} mr-1`}>
-                  {`${item},`}
-                </div>
-              );
-            }
-            if (index == 2) {
-              return (
-                <div key={index} className={`${fontSize} mr-1`}>
-                  {`${item}`}
-                </div>
-              );
-            }
-          }
           return (
-            <div key={index} className={`${fontSize} mr-1`}>
+            <div key={index} className={`${fontSize} px-1 genreItem relative`}>
               {`${item}`}
             </div>
           );

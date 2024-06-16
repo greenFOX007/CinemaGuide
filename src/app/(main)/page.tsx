@@ -2,7 +2,7 @@ import HeroBlock from "@/components/HeroBlock/HeroBlock";
 
 export default function Main() {
   return (
-    <div>
+    <div className="">
       <HeroBlock />
     </div>
   );

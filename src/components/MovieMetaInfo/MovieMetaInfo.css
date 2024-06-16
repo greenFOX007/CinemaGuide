@@ -1,0 +1,6 @@
+.genreItem:not(:last-child):before{
+    content: ',';
+    display: block;
+    position: absolute;
+    right: 0;
+}

@@ -16,6 +16,10 @@ const config: Config = {
     },
     extend: {
       backgroundImage: {},
+      backgroundColor: {
+        heroGradient:
+          "linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(255,255,255,0.6) 100%)",
+      },
       colors: {
         "main-black": "#0A0B0B",
         ["secondary"]: "#393B3C",

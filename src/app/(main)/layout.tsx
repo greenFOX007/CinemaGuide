@@ -15,12 +15,12 @@ export default function MainLayout({
         >
           <div
             className={
-              "header fixed left-0 right-0 px-20 max-lg:px-8 max-sm:px-5 max-md:px-5 backdrop-blur-sm"
+              "header fixed left-0 right-0 px-20 max-lg:px-8 max-sm:px-5 max-md:px-5 bg-modal backdrop-blur-sm z-10"
             }
           >
             <Header />
           </div>
-          <div className="content flex-auto mt-[150px]">{children}</div>
+          <div className="content flex-auto ">{children}</div>
           <div className={"footer"}>sdfsdf</div>
         </div>
       </AuthUserRequester>

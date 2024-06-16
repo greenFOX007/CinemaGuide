@@ -30,6 +30,7 @@ export default function SearchedItemCard({
         </div>
         <div className="flex flex-col justify-between">
           <MoviesMetaInfo
+            ratingSize="w-[45px] h-5"
             fontSize="text-xs"
             genre={genre}
             rating={rating}

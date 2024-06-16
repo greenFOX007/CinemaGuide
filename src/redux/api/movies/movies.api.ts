@@ -27,5 +27,8 @@ const moviesApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetRandomMovieQuery, useLazyGetMoviesWithParamsQuery } =
-  moviesApi;
+export const {
+  useGetRandomMovieQuery,
+  useLazyGetMoviesWithParamsQuery,
+  useLazyGetRandomMovieQuery,
+} = moviesApi;
