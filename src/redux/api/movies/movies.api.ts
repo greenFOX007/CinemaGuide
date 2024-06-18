@@ -1,5 +1,9 @@
 import { ETagTypes } from "@/constants/tagTypes";
-import { GetMovieWithParams, GetRandomMovie } from "./movies.namespaces";
+import {
+  GetMovieWithParams,
+  GetRandomMovie,
+  GetTopTenMovies,
+} from "./movies.namespaces";
 import baseApi from "../baseApi";
 
 const moviesApi = baseApi.injectEndpoints({
@@ -24,6 +28,15 @@ const moviesApi = baseApi.injectEndpoints({
       }),
       providesTags: [ETagTypes.GET_MOVIE_WITH_PARAMS],
     }),
+    getTopMovies: builder.query<
+      GetTopTenMovies.Response,
+      GetTopTenMovies.Payload
+    >({
+      query: () => ({
+        method: "GET",
+        url: "/movie/top10",
+      }),
+    }),
   }),
 });
 
@@ -31,4 +44,5 @@ export const {
   useGetRandomMovieQuery,
   useLazyGetMoviesWithParamsQuery,
   useLazyGetRandomMovieQuery,
+  useGetTopMoviesQuery,
 } = moviesApi;

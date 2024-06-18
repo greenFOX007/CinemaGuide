@@ -33,3 +33,6 @@ export type IGetRandomMoviePayload = void;
 
 export type IGetMovieWithParamsPayload = string;
 export type IGetMovieWithParamsResponse = Array<Movie>;
+
+export type IGetTopTenMoviesPayload = void;
+export type IGetTopTenMoviesResponse = Array<Movie>;

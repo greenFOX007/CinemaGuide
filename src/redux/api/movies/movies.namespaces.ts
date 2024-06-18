@@ -3,6 +3,8 @@ import {
   IGetMovieWithParamsResponse,
   IGetRandomMoviePayload,
   IGetRandomMovieResponse,
+  IGetTopTenMoviesPayload,
+  IGetTopTenMoviesResponse,
 } from "./movies.types";
 
 export namespace GetRandomMovie {
@@ -13,4 +15,9 @@ export namespace GetRandomMovie {
 export namespace GetMovieWithParams {
   export type Payload = IGetMovieWithParamsPayload;
   export type Response = IGetMovieWithParamsResponse;
+}
+
+export namespace GetTopTenMovies {
+  export type Payload = IGetTopTenMoviesPayload;
+  export type Response = IGetTopTenMoviesResponse;
 }

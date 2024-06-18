@@ -38,7 +38,7 @@ export default function MoviesMetaInfo({
       </div>
       <div className={`${fontSize} mr-3`}>{releaseYear}</div>
       <div className="flex mr-3">
-        {genre.slice(0, 3).map((item, index) => {
+        {genre.slice(0, 2).map((item, index) => {
           return (
             <div key={index} className={`${fontSize} px-1 genreItem relative`}>
               {`${item}`}
