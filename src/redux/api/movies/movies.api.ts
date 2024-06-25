@@ -1,5 +1,6 @@
 import { ETagTypes } from "@/constants/tagTypes";
 import {
+  GetGenres,
   GetMovieWithParams,
   GetRandomMovie,
   GetTopTenMovies,
@@ -37,12 +38,20 @@ const moviesApi = baseApi.injectEndpoints({
         url: "/movie/top10",
       }),
     }),
+    getGenres: builder.query<GetGenres.Response, GetGenres.Payload>({
+      query: () => ({
+        method: "GET",
+        url: "/movie/genres",
+      }),
+    }),
   }),
 });
 
 export const {
   useGetRandomMovieQuery,
   useLazyGetMoviesWithParamsQuery,
+  useGetMoviesWithParamsQuery,
   useLazyGetRandomMovieQuery,
   useGetTopMoviesQuery,
+  useGetGenresQuery,
 } = moviesApi;

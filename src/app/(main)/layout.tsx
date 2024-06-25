@@ -2,10 +2,12 @@ import AuthUserRequester from "@/components/AuthUserRequester/AuthUserRequester"
 import Footer from "@/components/Footer/Footer";
 import Header from "@/components/Header/Header";
 import StoreProvider from "@/components/StoreProvider/StoreProvider";
+import React from "react";
 
 export default function MainLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+  modal,
+}: Readonly<{ children: React.ReactNode; modal: React.ReactNode }>) {
   return (
     <StoreProvider>
       <AuthUserRequester>
@@ -25,6 +27,7 @@ export default function MainLayout({
           <div className={"footer"}>
             <Footer />
           </div>
+          {modal}
         </div>
       </AuthUserRequester>
     </StoreProvider>

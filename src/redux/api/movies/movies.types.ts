@@ -36,3 +36,6 @@ export type IGetMovieWithParamsResponse = Array<Movie>;
 
 export type IGetTopTenMoviesPayload = void;
 export type IGetTopTenMoviesResponse = Array<Movie>;
+
+export type IGetGenresPayload = void;
+export type IGetGenresResponse = Array<string>;

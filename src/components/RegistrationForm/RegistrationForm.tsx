@@ -86,8 +86,8 @@ export default function RegistrationForm({
                   <PrimeryButton
                     customStyles="w-full"
                     onClick={(e) => {
-                      e.stopPropagation();
                       e.preventDefault();
+                      e.stopPropagation();
                       changeAuth();
                     }}
                   >
@@ -183,26 +183,16 @@ export default function RegistrationForm({
                       "Создать аккаунт"
                     )}
                   </PrimeryButton>
-
-                  <div className="flex justify-center mt-6">
-                    <button
-                      className="text-black text-lg font-bold bg-transparent border-none outline-none "
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        changeAuth();
-                      }}
-                    >
-                      У меня есть пароль
-                    </button>
-                  </div>
                 </Form>
               )}
-              {isError && status.status === 400 && (
-                <p className="text-rose-600 text-sm font-bold text-center">
-                  Ошибка, такой пользователь существует.
-                </p>
-              )}
+
+              <div className="flex justify-center mt-6 relative">
+                {isError && status.status === 409 && (
+                  <p className="text-rose-600 text-sm text-center absolute -top-5 ">
+                    Ошибка, такой пользователь существует.
+                  </p>
+                )}
+              </div>
             </>
           );
         }}

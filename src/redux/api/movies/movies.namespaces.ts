@@ -1,4 +1,6 @@
 import {
+  IGetGenresPayload,
+  IGetGenresResponse,
   IGetMovieWithParamsPayload,
   IGetMovieWithParamsResponse,
   IGetRandomMoviePayload,
@@ -20,4 +22,9 @@ export namespace GetMovieWithParams {
 export namespace GetTopTenMovies {
   export type Payload = IGetTopTenMoviesPayload;
   export type Response = IGetTopTenMoviesResponse;
+}
+
+export namespace GetGenres {
+  export type Payload = IGetGenresPayload;
+  export type Response = IGetGenresResponse;
 }

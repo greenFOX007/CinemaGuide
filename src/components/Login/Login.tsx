@@ -33,13 +33,24 @@ export default function Login({ closeModal }: { closeModal: () => void }) {
         <Image width={180} height={24} src={logo} alt="Logo" />
       </div>
       {loginForm ? (
-        <AuthForm
-          closeModal={() => closeModal()}
-          changeRegistration={() => setLoginForm(false)}
-        />
+        <AuthForm closeModal={closeModal} />
       ) : (
-        <RegistrationForm changeAuth={() => setLoginForm(true)} />
+        <RegistrationForm
+          changeAuth={() => setInterval(() => setLoginForm(!loginForm), 0)}
+        />
       )}
+      <div className="flex justify-center mt-2">
+        <button
+          className="text-black text-lg font-bold bg-transparent border-none outline-none "
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setLoginForm(!loginForm);
+          }}
+        >
+          {loginForm ? "Регистрация" : "У меня есть пароль"}
+        </button>
+      </div>
     </div>
   );
 }

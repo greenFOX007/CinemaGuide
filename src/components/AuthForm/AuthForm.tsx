@@ -10,13 +10,7 @@ import Spiner from "@/shared/components/Spiner/Spiner";
 import { Formik, Form } from "formik";
 import { useDispatch } from "react-redux";
 
-export default function AuthForm({
-  changeRegistration,
-  closeModal,
-}: {
-  changeRegistration: () => void;
-  closeModal: () => void;
-}) {
+export default function AuthForm({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
 
   const [
@@ -28,14 +22,7 @@ export default function AuthForm({
     },
   ] = useLoginMutation();
 
-  const [
-    getAuthUser,
-    {
-      isLoading: authUserLoading,
-      isSuccess: authUserSuccess,
-      isError: authUserError,
-    },
-  ] = useLazyGetAuthUserQuery();
+  const [getAuthUser] = useLazyGetAuthUserQuery();
   return (
     <div className="opacity-0-0 transition-all duration-700">
       <Formik
@@ -94,16 +81,6 @@ export default function AuthForm({
                   Неверный Email или пароль.
                 </p>
               )}
-              <button
-                className="text-black text-lg font-bold bg-transparent border-none outline-none "
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  changeRegistration();
-                }}
-              >
-                Регистрация
-              </button>
             </div>
           </Form>
         )}

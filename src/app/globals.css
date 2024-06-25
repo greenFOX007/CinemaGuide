@@ -20,3 +20,20 @@ body {
     height: 2px;
     background-color: #DC5DFC;
 }
+
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: darkgrey;
+    border-radius: 100px;
+
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #DC5DFC;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 50px;
+}

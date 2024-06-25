@@ -4,17 +4,14 @@ import Image from "next/image";
 import logo from "../../assets/img/CinemaGuideLogo.png";
 import Navbar from "../Navbar/Navbar";
 import SearchPanel from "../SearchPanel/SearchPanel";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
-import ModalComponent from "@/shared/components/ModalComponent/ModalComponent";
-import { createPortal } from "react-dom";
+
 import { LoginSVG } from "@/shared/IconsSvg";
-import Login from "../Login/Login";
 import { useAuthSelector } from "@/redux/slices/auth";
 import { usePathname } from "next/navigation";
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
   const { isAuthenticated, authUser } = useAuthSelector();
   const pathname = usePathname();
 
@@ -36,8 +33,7 @@ export default function Header() {
           <SearchPanel />
           <div className="hidden max-lg:flex items-center">
             <Link
-              href={isAuthenticated ? "/account" : ""}
-              onClick={isAuthenticated ? () => {} : () => setIsOpen(true)}
+              href={isAuthenticated ? "/account" : "/login"}
               className="group bg-transparent outline-none borde-0"
             >
               <LoginSVG
@@ -49,8 +45,7 @@ export default function Header() {
           </div>
         </div>
         <Link
-          href={isAuthenticated ? "/account" : ""}
-          onClick={isAuthenticated ? () => {} : () => setIsOpen(true)}
+          href={isAuthenticated ? "/account" : "/login"}
           className={`${
             pathname === "/account" || pathname === "/account/settings"
               ? "active"
@@ -60,13 +55,6 @@ export default function Header() {
           {isAuthenticated ? authUser?.name : "Войти"}
         </Link>
       </header>
-      {isOpen &&
-        createPortal(
-          <ModalComponent onClose={() => setIsOpen(false)}>
-            <Login closeModal={() => setIsOpen(false)} />
-          </ModalComponent>,
-          rootModalRef.current as Element
-        )}
     </>
   );
 }
