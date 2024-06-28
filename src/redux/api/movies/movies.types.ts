@@ -31,11 +31,20 @@ export type IGetRandomMovieResponse = Movie;
 
 export type IGetRandomMoviePayload = void;
 
-export type IGetMovieWithParamsPayload = string;
-export type IGetMovieWithParamsResponse = Array<Movie>;
+export type IGetMoviesWithParamsPayload = string;
+export type IGetMoviesWithParamsResponse = Array<Movie>;
+
+export type IGetGenreMoviePayload = {
+  genre: string;
+  page: number;
+};
+export type IGetGenreMovieResponse = Array<Movie>;
 
 export type IGetTopTenMoviesPayload = void;
 export type IGetTopTenMoviesResponse = Array<Movie>;
 
 export type IGetGenresPayload = void;
 export type IGetGenresResponse = Array<string>;
+
+export type IGetMovieByIdPayload = number;
+export type IGetMovieByIdResponse = Movie;

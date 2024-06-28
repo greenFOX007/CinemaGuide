@@ -1,66 +1,43 @@
 "use client";
 
-import { GenresList, IGenres, genresList } from "@/constants/genres";
-import {
-  useGetMoviesWithParamsQuery,
-  useLazyGetMoviesWithParamsQuery,
-} from "@/redux/api/movies/movies.api";
-import { IGetMovieWithParamsResponse } from "@/redux/api/movies/movies.types";
+import TopBlockSkeleton from "@/components/TopBlockSkeleton/TopBlockSkeleton";
+import { IGenres, genresList } from "@/constants/genres";
+import { useGetGenreMoviesQuery } from "@/redux/api/movies/movies.api";
+import { IGetMoviesWithParamsResponse } from "@/redux/api/movies/movies.types";
 import PrimeryButton from "@/shared/components/PrimeryButton/PrimeryButton";
+import Spiner from "@/shared/components/Spiner/Spiner";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Page({ params }: { params: { slug: string } }) {
-  const [moviesArr, setMoviesArr] = useState<IGetMovieWithParamsResponse>([]);
+  const [moviesArr, setMoviesArr] = useState<IGetMoviesWithParamsResponse>([]);
   const [page, setPage] = useState(1);
   const genreRusName: IGenres = genresList.filter(
     (item) => item.name === params.slug
   )[0];
-  const [
-    getMoviesHandler,
-    { isLoading: load, isError: error, isSuccess: success },
-  ] = useLazyGetMoviesWithParamsQuery();
-  const { data, isError, isLoading, isSuccess } = useGetMoviesWithParamsQuery(
-    `genre=${params.slug}&count=15&page=1`
-  );
-  useEffect(() => {
-    if (isSuccess && data) {
-      setMoviesArr(data);
-    }
+
+  const { data, isLoading, isError, isSuccess } = useGetGenreMoviesQuery({
+    genre: params.slug,
+    page: page,
   });
 
-  // useEffect(() => {
-  async function getMovies(pagearg: number) {
-    try {
-      const res = await getMoviesHandler(
-        `genre=${params.slug}&count=15&page=${pagearg}`
-      );
-      console.log(res.data);
-
-      if (res.isSuccess && res.data) {
-        setMoviesArr((prev) => [...prev, ...res.data]);
-      }
-    } catch (err) {
-      console.log(err);
+  useEffect(() => {
+    if (data) {
+      setMoviesArr((prevItems) => [...prevItems, ...data]);
     }
-  }
-  //   getMovies();
-  // }, [page]);
+  }, [data]);
 
-  const showMoreHandler = async () => {
-    // setPage((prev) => prev + 1);
-    let page = 1;
-    ++page;
-    await getMovies(page);
+  const showMoreHandler = () => {
+    setPage((prev) => prev + 1);
   };
 
   return (
     <div className="">
       <Link href={"/genre"} className="">
-        <h1 className="text-5xl font-bold flex items-center">
+        <h1 className="text-5xl font-bold flex items-center max-md:text-[24px]">
           <svg
-            className="mr-7"
+            className="mr-7 max-md:mr-3"
             width="14"
             height="22"
             viewBox="0 0 14 22"
@@ -74,34 +51,37 @@ export default function Page({ params }: { params: { slug: string } }) {
           </svg>
           {genreRusName.rusName}
         </h1>
-        <div className="flex flex-wrap gap-10 py-16">
-          {moviesArr &&
-            moviesArr.map((item) => {
-              return (
-                <Link
-                  href={`/movie/${item.id}`}
-                  key={item.id}
-                  className="select-none w-[224px] h-[336px] rounded-2xl border border-white-opacity shadow-[0px_0px_80px_0px_#FFFFFF54] max-md:shadow-[0px_0px_10px_0px_#FFFFFF54] text-3xl flex justify-center items-center text-center font-bold shrink-0"
-                >
-                  {item.posterUrl ? (
-                    <Image
-                      className="size-full rounded-2xl"
-                      alt={item.title}
-                      src={item.posterUrl}
-                      width={224}
-                      height={336}
-                      title={item.title}
-                    />
-                  ) : (
-                    item.title
-                  )}
-                </Link>
-              );
-            })}
-        </div>
       </Link>
+      <div className="flex flex-wrap gap-10 py-16 justify-center">
+        {!isLoading &&
+          isSuccess &&
+          moviesArr &&
+          moviesArr.map((item) => {
+            return (
+              <Link
+                href={`/movie/${item.id}`}
+                key={item.id}
+                className="select-none w-[224px] h-[336px] rounded-2xl border border-white-opacity shadow-[0px_0px_80px_0px_#FFFFFF54] max-md:shadow-[0px_0px_10px_0px_#FFFFFF54] text-3xl flex justify-center items-center text-center font-bold shrink-0"
+              >
+                {item.posterUrl ? (
+                  <Image
+                    className="size-full rounded-2xl"
+                    alt={item.title}
+                    src={item.posterUrl}
+                    width={224}
+                    height={336}
+                    title={item.title}
+                  />
+                ) : (
+                  item.title
+                )}
+              </Link>
+            );
+          })}
+        {isLoading && <TopBlockSkeleton amountItems={15} />}
+      </div>
       <PrimeryButton onClick={showMoreHandler} customStyles="w-[218px] mx-auto">
-        Показать еще
+        {isLoading ? <Spiner /> : "Показать еще"}
       </PrimeryButton>
     </div>
   );

@@ -3,16 +3,15 @@ import PrimeryButton from "@/shared/components/PrimeryButton/PrimeryButton";
 import MoviesMetaInfo from "../MovieMetaInfo/MovieMetaInfo";
 import SecondaryButton from "@/shared/components/SecondaryButton/SecondaryButton";
 import { HeartSVG, RefreshSVG } from "@/shared/IconsSvg";
-import {
-  useGetRandomMovieQuery,
-  useLazyGetRandomMovieQuery,
-} from "@/redux/api/movies/movies.api";
+import { useLazyGetRandomMovieQuery } from "@/redux/api/movies/movies.api";
 import "./HeroBlock.css";
 import { useEffect, useState } from "react";
 import { Movie } from "@/redux/api/movies/movies.types";
 import HeroBlockSkeleton from "../HeroBlockSkeleton/HeroBlockSkeleton";
+import { useRouter } from "next/navigation";
 
 export default function HeroBlock() {
+  const router = useRouter();
   const [data, setData] = useState<Movie | null>(null);
   const [getRandomMovieHandler, { isError, isLoading, isSuccess }] =
     useLazyGetRandomMovieQuery();
@@ -68,7 +67,7 @@ export default function HeroBlock() {
                 Трейлер
               </PrimeryButton>
               <SecondaryButton
-                onClick={() => console.log("lol")}
+                onClick={() => router.push(`/movie/${data.id}`)}
                 customStyles={"w-[171px] max-[640px]:w-[167px]"}
               >
                 О фильме

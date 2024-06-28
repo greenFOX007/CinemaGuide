@@ -1,0 +1,11 @@
+.underline::after{
+    content: '';
+    position: absolute;
+    height: 1px;
+    border-bottom: 1px;
+    border-style: dotted;
+    border-color: rgba(255,255,255,.4);
+    left: 0;
+    right: 0;
+    bottom: 7px;
+}

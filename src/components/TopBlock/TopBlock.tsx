@@ -43,7 +43,7 @@ export default function TopBlock() {
           data.map((item, index) => {
             return (
               <Link
-                href={"/"}
+                href={`/movie/${item.id}`}
                 key={item.id}
                 className="select-none relative w-[224px] h-[336px] rounded-2xl border border-white-opacity shadow-[0px_0px_80px_0px_#FFFFFF54] max-md:shadow-[0px_0px_10px_0px_#FFFFFF54] text-3xl flex justify-center items-center text-center font-bold shrink-0"
               >

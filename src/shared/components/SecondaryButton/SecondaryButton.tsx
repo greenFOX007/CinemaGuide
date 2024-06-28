@@ -1,6 +1,6 @@
 interface IButtonProps {
   children: string | React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   customStyles?: string;
 }
 

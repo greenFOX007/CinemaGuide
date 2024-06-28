@@ -1,8 +1,12 @@
 import {
+  IGetGenreMoviePayload,
+  IGetGenreMovieResponse,
   IGetGenresPayload,
   IGetGenresResponse,
-  IGetMovieWithParamsPayload,
-  IGetMovieWithParamsResponse,
+  IGetMovieByIdPayload,
+  IGetMovieByIdResponse,
+  IGetMoviesWithParamsPayload,
+  IGetMoviesWithParamsResponse,
   IGetRandomMoviePayload,
   IGetRandomMovieResponse,
   IGetTopTenMoviesPayload,
@@ -14,9 +18,14 @@ export namespace GetRandomMovie {
   export type Response = IGetRandomMovieResponse;
 }
 
-export namespace GetMovieWithParams {
-  export type Payload = IGetMovieWithParamsPayload;
-  export type Response = IGetMovieWithParamsResponse;
+export namespace GetMoviesWithParams {
+  export type Payload = IGetMoviesWithParamsPayload;
+  export type Response = IGetMoviesWithParamsResponse;
+}
+
+export namespace GetMovieById {
+  export type Payload = IGetMovieByIdPayload;
+  export type Response = IGetMovieByIdResponse;
 }
 
 export namespace GetTopTenMovies {
@@ -27,4 +36,9 @@ export namespace GetTopTenMovies {
 export namespace GetGenres {
   export type Payload = IGetGenresPayload;
   export type Response = IGetGenresResponse;
+}
+
+export namespace GetGenreMovies {
+  export type Payload = IGetGenreMoviePayload;
+  export type Response = IGetGenreMovieResponse;
 }

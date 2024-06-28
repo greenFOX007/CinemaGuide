@@ -1,5 +1,9 @@
-export default function TopBlockSkeleton() {
-  return Array(10)
+export default function TopBlockSkeleton({
+  amountItems = 10,
+}: {
+  amountItems?: number;
+}) {
+  return Array(amountItems)
     .fill("1")
     .map((item, index) => {
       return (
