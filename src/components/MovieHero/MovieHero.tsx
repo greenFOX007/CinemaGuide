@@ -8,11 +8,11 @@ import "./MovieHero.css";
 
 import HeroBlockSkeleton from "../HeroBlockSkeleton/HeroBlockSkeleton";
 import MovieDetail from "../MovieDetails/MovieDetails";
+import { useRouter } from "next/navigation";
 
 export default function MovieHero({ id }: { id: number }) {
   const { data, isLoading, isError, isSuccess } = useGetMovieByIdQuery(id);
-
-  console.log(data);
+  const router = useRouter();
 
   return (
     <>
@@ -47,13 +47,13 @@ export default function MovieHero({ id }: { id: number }) {
               </div>
               <div className=" flex gap-4 flex-wrap">
                 <PrimeryButton
-                  onClick={() => console.log("lol")}
+                  onClick={() => router.push(`/movie/trailer/${id}`)}
                   customStyles={"w-[171px]"}
                 >
                   Трейлер
                 </PrimeryButton>
                 <SecondaryButton
-                  onClick={() => console.log("lol")}
+                  onClick={() => router.push(`/trailer/${id}`)}
                   customStyles={"w-[68px] group"}
                 >
                   <HeartSVG styles="group-hover:fill-black" />
