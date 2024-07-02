@@ -1,11 +1,10 @@
-"use client";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import AuthForm from "../AuthForm/AuthForm";
 import logo from "../../assets/img/CinemaGuideLogo.png";
 import RegistrationForm from "../RegistrationForm/RegistrationForm";
 
-export default function Login() {
+export default function Login({ closeModal }: { closeModal: () => void }) {
   const [loginForm, setLoginForm] = useState(true);
   const blockRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -34,7 +33,7 @@ export default function Login() {
         <Image width={180} height={24} src={logo} alt="Logo" />
       </div>
       {loginForm ? (
-        <AuthForm />
+        <AuthForm closeModal={closeModal} />
       ) : (
         <RegistrationForm
           changeAuth={() => setInterval(() => setLoginForm(!loginForm), 0)}

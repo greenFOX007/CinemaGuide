@@ -36,7 +36,7 @@ export default function LoginPage() {
           <Image width={180} height={24} src={logo} alt="Logo" />
         </div>
         {loginForm ? (
-          <AuthForm />
+          <AuthForm closeModal={() => {}} />
         ) : (
           <RegistrationForm changeAuth={() => setLoginForm(true)} />
         )}

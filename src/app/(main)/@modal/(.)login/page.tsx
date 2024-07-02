@@ -11,7 +11,7 @@ export default function LoginModal() {
         router.back();
       }}
     >
-      <Login />
+      <Login closeModal={() => router.back()} />
     </ModalComponent>
   );
 }

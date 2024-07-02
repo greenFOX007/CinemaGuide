@@ -25,6 +25,7 @@ export default function MovieHero({ id }: { id: number }) {
   const [addFavoritesHandler] = useAddFavoritesMutation();
   const [isInFavorites, setIsInFavorites] = useState(false);
   const { data: authUser } = useGetAuthUserQuery();
+  console.log(isAuthenticated);
 
   useEffect(() => {
     if (authUser && data) {

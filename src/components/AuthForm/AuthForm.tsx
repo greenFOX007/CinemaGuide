@@ -1,4 +1,3 @@
-"use client";
 import {
   useLoginMutation,
   useLazyGetAuthUserQuery,
@@ -9,12 +8,10 @@ import Input from "@/shared/components/Input/Input";
 import PrimeryButton from "@/shared/components/PrimeryButton/PrimeryButton";
 import Spiner from "@/shared/components/Spiner/Spiner";
 import { Formik, Form } from "formik";
-import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 
-export default function AuthForm() {
+export default function AuthForm({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
-  const router = useRouter();
 
   const [
     loginHandler,
@@ -38,19 +35,28 @@ export default function AuthForm() {
               password: value.password,
             };
 
-            let req = await loginHandler({ data: reqValues })
-              .unwrap()
-              .then(async () => {
-                let authUserResponse = await getAuthUser();
+            // let req = await loginHandler({ data: reqValues })
+            //   .unwrap()
+            //   .then(async () => {
+            //     let authUserResponse = await getAuthUser();
 
-                if (authUserResponse.data) {
-                  dispatch(
-                    authSlice.actions.authUserData(authUserResponse.data)
-                  );
-                  dispatch(authSlice.actions.loggedIn());
-                  router.push("/");
-                }
-              });
+            //     if (authUserResponse.data) {
+            //       dispatch(
+            //         authSlice.actions.authUserData(authUserResponse.data)
+            //       );
+            //       dispatch(authSlice.actions.loggedIn());
+            //       closeModal();
+            //     }
+            //   });
+            let req = await loginHandler({ data: reqValues });
+            if (req.data) {
+              let authUserResponse = await getAuthUser();
+              if (authUserResponse.data) {
+                dispatch(authSlice.actions.authUserData(authUserResponse.data));
+                dispatch(authSlice.actions.loggedIn());
+                closeModal();
+              }
+            }
           } catch (err) {
             setStatus(err);
             setSubmitting(false);
