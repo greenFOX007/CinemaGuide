@@ -30,7 +30,6 @@ export const SearchWidget = forwardRef(function SearchWidget(props, ref: any) {
   const handleChange = debounce(async (e: ChangeEvent<HTMLInputElement>) => {
     const queryString = `count=5&title=${e.target.value}`;
     const res = await getMovieHandler(queryString);
-    console.log(data);
   }, 300);
 
   return (

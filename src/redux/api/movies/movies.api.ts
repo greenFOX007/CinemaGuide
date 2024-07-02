@@ -1,11 +1,14 @@
 import { ETagTypes } from "@/constants/tagTypes";
 import {
+  AddFavoritesMovie,
+  GetFavorites,
   GetGenreMovies,
   GetGenres,
   GetMovieById,
   GetMoviesWithParams,
   GetRandomMovie,
   GetTopTenMovies,
+  RemoveFavoritesMovie,
 } from "./movies.namespaces";
 import baseApi from "../baseApi";
 
@@ -62,6 +65,34 @@ const moviesApi = baseApi.injectEndpoints({
         url: "/movie/genres",
       }),
     }),
+    addFavorites: builder.mutation<
+      AddFavoritesMovie.Response,
+      AddFavoritesMovie.Payload
+    >({
+      query: (data) => ({
+        method: "POST",
+        url: "/favorites",
+        data,
+      }),
+      invalidatesTags: [ETagTypes.ADD_FAVORITES],
+    }),
+    removeFavoriteMovie: builder.mutation<
+      RemoveFavoritesMovie.Response,
+      RemoveFavoritesMovie.Payload
+    >({
+      query: (id) => ({
+        method: "DELETE",
+        url: `/favorites/${id}`,
+      }),
+      invalidatesTags: [ETagTypes.REMOVE_FAVORITES],
+    }),
+    getFavorites: builder.query<GetFavorites.Response, GetFavorites.Payload>({
+      query: () => ({
+        method: "GET",
+        url: "/favorites",
+      }),
+      providesTags: [ETagTypes.REMOVE_FAVORITES, ETagTypes.ADD_FAVORITES],
+    }),
   }),
 });
 
@@ -75,4 +106,7 @@ export const {
   useGetTopMoviesQuery,
   useGetGenresQuery,
   useGetGenreMoviesQuery,
+  useAddFavoritesMutation,
+  useGetFavoritesQuery,
+  useRemoveFavoriteMovieMutation,
 } = moviesApi;

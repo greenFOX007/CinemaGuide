@@ -48,3 +48,12 @@ export type IGetGenresResponse = Array<string>;
 
 export type IGetMovieByIdPayload = number;
 export type IGetMovieByIdResponse = Movie;
+
+export type IAddFavoritesMoviePayload = { id: string };
+export type IAddFavoritesMovieResponse = void;
+
+export type IGetFavoritesPayload = void;
+export type IGetFavoritesResponse = Array<Movie>;
+
+export type IRemoveFavoritesMoviePayload = number;
+export type IRemoveFavoritesMovieResponse = void;

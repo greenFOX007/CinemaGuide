@@ -26,7 +26,7 @@ const authApi = baseApi.injectEndpoints({
         url: "/profile",
         method: "GET",
       }),
-      providesTags: [ETagTypes.GET_AUTH_USER],
+      providesTags: [ETagTypes.GET_AUTH_USER, ETagTypes.ADD_FAVORITES],
     }),
     logout: builder.query<Logout.Response, Logout.Payload>({
       query: () => ({

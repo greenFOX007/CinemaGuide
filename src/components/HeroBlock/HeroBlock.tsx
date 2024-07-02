@@ -3,19 +3,29 @@ import PrimeryButton from "@/shared/components/PrimeryButton/PrimeryButton";
 import MoviesMetaInfo from "../MovieMetaInfo/MovieMetaInfo";
 import SecondaryButton from "@/shared/components/SecondaryButton/SecondaryButton";
 import { HeartSVG, RefreshSVG } from "@/shared/IconsSvg";
-import { useLazyGetRandomMovieQuery } from "@/redux/api/movies/movies.api";
+import {
+  useAddFavoritesMutation,
+  useLazyGetRandomMovieQuery,
+} from "@/redux/api/movies/movies.api";
 import "./HeroBlock.css";
 import { useEffect, useState } from "react";
 import { Movie } from "@/redux/api/movies/movies.types";
 import HeroBlockSkeleton from "../HeroBlockSkeleton/HeroBlockSkeleton";
 import { useRouter } from "next/navigation";
+import { useAuthSelector } from "@/redux/slices/auth";
+import { useGetAuthUserQuery } from "@/redux/api/auth/auth.api";
+import { checkIsInFavorite } from "@/helpers/checkIsInFavorite";
+import { toast } from "react-toastify";
 
 export default function HeroBlock() {
   const router = useRouter();
   const [data, setData] = useState<Movie | null>(null);
-  const [getRandomMovieHandler, { isError, isLoading, isSuccess }] =
+  const [getRandomMovieHandler, { isLoading, isSuccess }] =
     useLazyGetRandomMovieQuery();
-
+  const { isAuthenticated } = useAuthSelector();
+  const [addFavoritesHandler] = useAddFavoritesMutation();
+  const { data: userFavorites } = useGetAuthUserQuery();
+  const [isInFavorites, setIsInFavorites] = useState(false);
   const getMovie = async () => {
     const res = await getRandomMovieHandler();
     if (res.data) {
@@ -26,6 +36,20 @@ export default function HeroBlock() {
   useEffect(() => {
     getMovie();
   }, []);
+
+  useEffect(() => {
+    if (userFavorites && data) {
+      setIsInFavorites(checkIsInFavorite(userFavorites?.favorites, data.id));
+    }
+  }, [userFavorites, data, isInFavorites]);
+
+  const handleAddFavorite = () => {
+    if (isAuthenticated && data) {
+      return addFavoritesHandler({ id: String(data.id) });
+    } else {
+      router.push("/login");
+    }
+  };
 
   return (
     <>
@@ -61,7 +85,7 @@ export default function HeroBlock() {
             </div>
             <div className=" flex gap-4 flex-wrap">
               <PrimeryButton
-                onClick={() => console.log("lol")}
+                onClick={() => router.push(`/movie/trailer/${data.id}`)}
                 customStyles={"w-[171px] max-[640px]:w-full"}
               >
                 Трейлер
@@ -73,10 +97,21 @@ export default function HeroBlock() {
                 О фильме
               </SecondaryButton>
               <SecondaryButton
-                onClick={() => console.log("lol")}
+                onClick={async () => {
+                  const res: any = await handleAddFavorite();
+
+                  if (res?.error && res?.error?.status === 400) {
+                    toast.info("Вы уже добавили это фильм");
+                  } else if (res?.error && res?.error?.status !== 400) {
+                    toast.error("Что-то пошло не так!");
+                  }
+                }}
                 customStyles={"w-[68px] group"}
               >
-                <HeartSVG styles="group-hover:fill-black" />
+                <HeartSVG
+                  color={isInFavorites ? "red" : ""}
+                  styles="group-hover:fill-black"
+                />
               </SecondaryButton>
               <SecondaryButton
                 onClick={getMovie}

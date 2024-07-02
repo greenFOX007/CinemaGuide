@@ -23,7 +23,7 @@ export default function RequireAuth({
         dispatch(authSlice.actions.authUserData(userResponse.data));
         dispatch(authSlice.actions.loggedIn());
       } else {
-        location.push("/");
+        location.push("/login");
       }
     };
     loadUser();

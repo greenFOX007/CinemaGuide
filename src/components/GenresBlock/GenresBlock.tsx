@@ -1,17 +1,8 @@
-// import httpClient from "@/utils/axios";
 import Link from "next/link";
 import { genresList } from "@/constants/genres";
 import Image from "next/image";
 
-// async function getData() {
-//   const res: any = await httpClient.get("/movie/genres");
-
-//   return res.data;
-// }
-
 export default async function GenresBlock() {
-  // const data: Array<string> = await getData();
-  // console.log(data);
   return (
     <div className="flex gap-10 flex-wrap justify-center">
       {genresList.map((item, index) => {

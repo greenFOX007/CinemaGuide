@@ -3,6 +3,8 @@ import Footer from "@/components/Footer/Footer";
 import Header from "@/components/Header/Header";
 import StoreProvider from "@/components/StoreProvider/StoreProvider";
 import React from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function MainLayout({
   children,
@@ -27,8 +29,20 @@ export default function MainLayout({
           <div className={"footer"}>
             <Footer />
           </div>
-          {modal}
         </div>
+        {modal}
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </AuthUserRequester>
     </StoreProvider>
   );

@@ -1,4 +1,8 @@
 import {
+  IAddFavoritesMoviePayload,
+  IAddFavoritesMovieResponse,
+  IGetFavoritesPayload,
+  IGetFavoritesResponse,
   IGetGenreMoviePayload,
   IGetGenreMovieResponse,
   IGetGenresPayload,
@@ -11,6 +15,8 @@ import {
   IGetRandomMovieResponse,
   IGetTopTenMoviesPayload,
   IGetTopTenMoviesResponse,
+  IRemoveFavoritesMoviePayload,
+  IRemoveFavoritesMovieResponse,
 } from "./movies.types";
 
 export namespace GetRandomMovie {
@@ -41,4 +47,19 @@ export namespace GetGenres {
 export namespace GetGenreMovies {
   export type Payload = IGetGenreMoviePayload;
   export type Response = IGetGenreMovieResponse;
+}
+
+export namespace AddFavoritesMovie {
+  export type Payload = IAddFavoritesMoviePayload;
+  export type Response = IAddFavoritesMovieResponse;
+}
+
+export namespace RemoveFavoritesMovie {
+  export type Payload = IRemoveFavoritesMoviePayload;
+  export type Response = IRemoveFavoritesMovieResponse;
+}
+
+export namespace GetFavorites {
+  export type Payload = IGetFavoritesPayload;
+  export type Response = IGetFavoritesResponse;
 }

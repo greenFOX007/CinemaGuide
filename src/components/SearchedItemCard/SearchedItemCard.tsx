@@ -21,10 +21,11 @@ export default function SearchedItemCard({
   releaseYear,
   runtime,
   title,
+  id,
 }: TSearchedItemCard) {
   return (
     <li className="rounded-lg hover:shadow-[0px_0px_7px_1px_rgba(0,0,0,0.75)] transition-all duration-300">
-      <Link href={"/"} className="flex px-2 py-4 ">
+      <Link href={`/movie/${id}`} className="flex px-2 py-4 ">
         <div className="mr-4">
           <Image width={40} height={52} src={posterUrl} alt={title} />
         </div>

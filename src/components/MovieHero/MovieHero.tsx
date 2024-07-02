@@ -3,16 +3,46 @@ import PrimeryButton from "@/shared/components/PrimeryButton/PrimeryButton";
 import MoviesMetaInfo from "../MovieMetaInfo/MovieMetaInfo";
 import SecondaryButton from "@/shared/components/SecondaryButton/SecondaryButton";
 import { HeartSVG } from "@/shared/IconsSvg";
-import { useGetMovieByIdQuery } from "@/redux/api/movies/movies.api";
+import {
+  useAddFavoritesMutation,
+  useGetMovieByIdQuery,
+} from "@/redux/api/movies/movies.api";
 import "./MovieHero.css";
 
 import HeroBlockSkeleton from "../HeroBlockSkeleton/HeroBlockSkeleton";
 import MovieDetail from "../MovieDetails/MovieDetails";
 import { useRouter } from "next/navigation";
+import { useAuthSelector } from "@/redux/slices/auth";
+import { useEffect, useState } from "react";
+import { useGetAuthUserQuery } from "@/redux/api/auth/auth.api";
+import { checkIsInFavorite } from "@/helpers/checkIsInFavorite";
+import { toast } from "react-toastify";
 
 export default function MovieHero({ id }: { id: number }) {
+  const { isAuthenticated } = useAuthSelector();
   const { data, isLoading, isError, isSuccess } = useGetMovieByIdQuery(id);
   const router = useRouter();
+  const [addFavoritesHandler] = useAddFavoritesMutation();
+  const [isInFavorites, setIsInFavorites] = useState(false);
+  const { data: authUser } = useGetAuthUserQuery();
+
+  useEffect(() => {
+    if (authUser && data) {
+      setIsInFavorites(checkIsInFavorite(authUser?.favorites, data.id));
+    }
+  }, [authUser, data, isInFavorites]);
+
+  useEffect(() => {
+    if (isError) throw new Error();
+  }, [isError]);
+
+  const handleAddFavorite = () => {
+    if (isAuthenticated) {
+      return addFavoritesHandler({ id: String(id) });
+    } else {
+      router.push("/login");
+    }
+  };
 
   return (
     <>
@@ -53,10 +83,20 @@ export default function MovieHero({ id }: { id: number }) {
                   Трейлер
                 </PrimeryButton>
                 <SecondaryButton
-                  onClick={() => router.push(`/trailer/${id}`)}
+                  onClick={async () => {
+                    const res: any = await handleAddFavorite();
+                    if (res?.error && res?.error?.status === 400) {
+                      toast.info("Вы уже добавили это фильм");
+                    } else if (res?.error && res?.error?.status !== 400) {
+                      toast.error("Что-то пошло не так!");
+                    }
+                  }}
                   customStyles={"w-[68px] group"}
                 >
-                  <HeartSVG styles="group-hover:fill-black" />
+                  <HeartSVG
+                    color={isInFavorites ? "red" : ""}
+                    styles="group-hover:fill-black"
+                  />
                 </SecondaryButton>
               </div>
             </div>

@@ -12,8 +12,11 @@ export default function ModalComponent({
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    let a = document.querySelector("body");
     let timer = setTimeout(() => {
       modalRef.current && modalRef.current.classList.remove("opacity-0");
+
+      a && a.classList.add("noScroll");
     }, 500);
 
     const onClick = (e: MouseEvent) => {
@@ -22,6 +25,7 @@ export default function ModalComponent({
         !modalContainerRef.current.contains(e.target as Node)
       ) {
         modalRef.current && modalRef.current.classList.add("opacity-0");
+        a && a.classList.remove("noScroll");
         setTimeout(() => {
           onClose();
         }, 500);
@@ -30,6 +34,7 @@ export default function ModalComponent({
     document.addEventListener("click", onClick);
     return () => {
       document.removeEventListener("click", onClick);
+      a && a.classList.remove("noScroll");
       clearTimeout(timer);
     };
   });
@@ -37,7 +42,7 @@ export default function ModalComponent({
   return (
     <div
       ref={modalRef}
-      className="flex items-center justify-center absolute inset-x-0 inset-y-0 bg-modal transition-opacity duration-500 opacity-0"
+      className="modal-open flex items-center justify-center fixed inset-x-0 inset-y-0 bg-modal transition-opacity duration-500 opacity-0"
     >
       <div className="my-16 h-ma" ref={modalContainerRef}>
         {children}
