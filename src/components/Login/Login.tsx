@@ -33,7 +33,7 @@ export default function Login({ closeModal }: { closeModal: () => void }) {
         <Image width={180} height={24} src={logo} alt="Logo" />
       </div>
       {loginForm ? (
-        <AuthForm closeModal={closeModal} />
+        <AuthForm />
       ) : (
         <RegistrationForm
           changeAuth={() => setInterval(() => setLoginForm(!loginForm), 0)}

@@ -8,10 +8,12 @@ import Input from "@/shared/components/Input/Input";
 import PrimeryButton from "@/shared/components/PrimeryButton/PrimeryButton";
 import Spiner from "@/shared/components/Spiner/Spiner";
 import { Formik, Form } from "formik";
+import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 
-export default function AuthForm({ closeModal }: { closeModal: () => void }) {
+export default function AuthForm() {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const [
     loginHandler,
@@ -45,7 +47,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
                     authSlice.actions.authUserData(authUserResponse.data)
                   );
                   dispatch(authSlice.actions.loggedIn());
-                  closeModal();
+                  router.back();
                 }
               });
           } catch (err) {
