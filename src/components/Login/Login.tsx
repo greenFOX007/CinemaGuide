@@ -1,10 +1,11 @@
+"use client";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import AuthForm from "../AuthForm/AuthForm";
 import logo from "../../assets/img/CinemaGuideLogo.png";
 import RegistrationForm from "../RegistrationForm/RegistrationForm";
 
-export default function Login({ closeModal }: { closeModal: () => void }) {
+export default function Login() {
   const [loginForm, setLoginForm] = useState(true);
   const blockRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {

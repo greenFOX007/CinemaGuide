@@ -48,7 +48,7 @@ export default function AuthForm() {
                     authSlice.actions.authUserData(authUserResponse.data)
                   );
                   dispatch(authSlice.actions.loggedIn());
-                  router.back();
+                  router.push("/");
                 }
               });
           } catch (err) {
