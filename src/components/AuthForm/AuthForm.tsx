@@ -63,7 +63,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
           }
         }}
       >
-        {({ status }) => (
+        {({ status, submitForm }) => (
           <Form className="overflow-y-hidden relative">
             <Input
               styles="mb-3"
@@ -81,7 +81,11 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             >
               <PasswordSVG styles="group-hover:fill-activeBtn transition-colors duration-100" />
             </Input>
-            <PrimeryButton type="submit" customStyles="w-full">
+            <PrimeryButton
+              onClick={submitForm}
+              // type="submit"
+              customStyles="w-full"
+            >
               {isLoadingLogin ? <Spiner /> : "Войти"}
             </PrimeryButton>
             <div className="flex justify-center mt-6 relative">
