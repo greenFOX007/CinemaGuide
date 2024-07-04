@@ -8,6 +8,7 @@ import Input from "@/shared/components/Input/Input";
 import PrimeryButton from "@/shared/components/PrimeryButton/PrimeryButton";
 import Spiner from "@/shared/components/Spiner/Spiner";
 import { Formik, Form } from "formik";
+import { cookies } from "next/headers";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
@@ -22,10 +23,12 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
         if (authUserResponse.data) {
           dispatch(authSlice.actions.authUserData(authUserResponse.data));
           dispatch(authSlice.actions.loggedIn());
-          closeModal();
+          // closeModal();
         }
       };
-      func();
+      setTimeout(() => {
+        func();
+      }, 0);
     }
   }, [isLogin]);
 
@@ -92,6 +95,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             >
               <PasswordSVG styles="group-hover:fill-activeBtn transition-colors duration-100" />
             </Input>
+            <div className="text-black">{String(isLogin)}</div>
             <PrimeryButton type="submit" customStyles="w-full">
               {isLoadingLogin ? <Spiner /> : "Войти"}
             </PrimeryButton>
