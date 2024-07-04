@@ -88,8 +88,8 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
           }
         }}
       >
-        {({ status, values }) => (
-          <Form className="overflow-y-hidden relative">
+        {({ status, handleSubmit }) => (
+          <Form onSubmit={handleSubmit} className="overflow-y-hidden relative">
             <Input
               styles="mb-3"
               placeholder="Электронная почта"
