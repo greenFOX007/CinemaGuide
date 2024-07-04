@@ -15,7 +15,7 @@ import { date } from "yup";
 
 export default function AuthForm({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
-  const { isAuthenticated } = useAuthSelector();
+  const { isAuthenticated, authUser } = useAuthSelector();
   const [dataLol, setDataLol] = useState<any>();
 
   const [
@@ -41,22 +41,14 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             };
 
             let req = await loginHandler({ data: reqValues });
-            // setDataLol(req);
-            // console.log(req);
-            // if (req.data) {
-            //   let authUserResponse = await getAuthUser();
-            //   if (authUserResponse.data) setDataLol(authUserResponse);
-            //   // if (authUserResponse.data) {
-            //   //   await dispatch(
-            //   //     authSlice.actions.authUserData(authUserResponse.data)
-            //   //   );
-            //   //   await dispatch(authSlice.actions.loggedIn());
-            //   // }
-            // }
             if (req.data) {
-              dispatch(authSlice.actions.loggedIn());
-              // closeModal();
-              setSubmitting(false);
+              const authUserResponse = await getAuthUser();
+              if (authUserResponse.data) {
+                dispatch(authSlice.actions.authUserData(authUserResponse.data));
+                dispatch(authSlice.actions.loggedIn());
+                setSubmitting(false);
+                closeModal();
+              }
             }
 
             // closeModal();
@@ -117,6 +109,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             </Input>
             <div className="text-black">
               {isAuthenticated ? String(isAuthenticated) : "lol"}
+              {authUser ? JSON.stringify(authUser) : "lol"}
             </div>
             <PrimeryButton type={"submit"} customStyles="w-full">
               {isLoadingLogin ? <Spiner /> : "Войти"}
