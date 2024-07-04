@@ -38,7 +38,7 @@ export default function MovieHero({ id }: { id: number }) {
   }, [isError]);
 
   const handleAddFavorite = () => {
-    if (isAuthenticated) {
+    if (authUser) {
       return addFavoritesHandler({ id: String(id) });
     } else {
       router.push("/login");
