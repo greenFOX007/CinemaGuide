@@ -39,23 +39,25 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
               password: value.password,
             };
 
-            let req = await loginHandler({ data: reqValues })
-              .unwrap()
-              .then(async () => {
-                setTimeout(async () => {
-                  let authUserResponse = await getAuthUser();
-                  setStatus(JSON.stringify(authUserResponse));
-                  if (authUserResponse.data) {
-                    dispatch(
-                      authSlice.actions.authUserData(authUserResponse.data)
-                    );
-                    dispatch(authSlice.actions.loggedIn());
+            let req = await loginHandler({ data: reqValues });
+            if (req.data) {
+              setSubmitting(false);
+              closeModal();
+            }
+            // .unwrap()
+            // .then(async () => {
+            //   let authUserResponse = await getAuthUser();
+            //   setStatus(JSON.stringify(authUserResponse));
+            //   if (authUserResponse.data) {
+            //     dispatch(
+            //       authSlice.actions.authUserData(authUserResponse.data)
+            //     );
+            //     dispatch(authSlice.actions.loggedIn());
 
-                    closeModal();
-                    setSubmitting(false);
-                  }
-                }, 300);
-              });
+            //     closeModal();
+            //     setSubmitting(false);
+            //   }
+            // });
           } catch (err) {
             setStatus(err);
             setSubmitting(false);
