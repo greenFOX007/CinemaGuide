@@ -45,8 +45,9 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
                     authSlice.actions.authUserData(authUserResponse.data)
                   );
                   dispatch(authSlice.actions.loggedIn());
-                  alert("ok");
-                  closeModal();
+
+                  // closeModal();
+                  setStatus("ok");
                 }
               });
             setSubmitting(false);
@@ -83,6 +84,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             >
               <PasswordSVG styles="group-hover:fill-activeBtn transition-colors duration-100" />
             </Input>
+            <div className="text-black">{status}</div>
             <PrimeryButton type={"submit"} customStyles="w-full">
               {isLoadingLogin ? <Spiner /> : "Войти"}
             </PrimeryButton>
