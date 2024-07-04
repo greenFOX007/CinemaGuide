@@ -110,6 +110,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             <div className="text-black">
               {isAuthenticated ? String(isAuthenticated) : "lol"}
               {authUser ? JSON.stringify(authUser) : "lol"}
+              {status ? JSON.stringify(status) : "lol"}
             </div>
             <PrimeryButton type={"submit"} customStyles="w-full">
               {isLoadingLogin ? <Spiner /> : "Войти"}
