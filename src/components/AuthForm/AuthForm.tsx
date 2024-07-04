@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 
 export default function AuthForm({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
+  const { authUser } = useAuthSelector();
 
   const [
     loginHandler,
@@ -35,35 +36,35 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
               password: value.password,
             };
 
-            // let req = await loginHandler({ data: reqValues })
-            //   .unwrap()
-            //   .then(async () => {
-            //     let authUserResponse = await getAuthUser();
+            let req = await loginHandler({ data: reqValues })
+              .unwrap()
+              .then(async () => {
+                let authUserResponse = await getAuthUser();
 
-            //     if (authUserResponse.data) {
-            //       dispatch(
-            //         authSlice.actions.authUserData(authUserResponse.data)
-            //       );
-            //       dispatch(authSlice.actions.loggedIn());
+                if (authUserResponse.data) {
+                  dispatch(
+                    authSlice.actions.authUserData(authUserResponse.data)
+                  );
+                  dispatch(authSlice.actions.loggedIn());
 
-            //       // closeModal();
-            //       setStatus("ok");
-            //     }
-            //   });
-            // setSubmitting(false);
-            let req = await loginHandler({ data: reqValues });
-            if (req.error) {
-              setStatus(req.error);
-            }
-            if (isSuccessLogin) {
-              // let authUserResponse = await getAuthUser();
-              // if (authUserResponse.data) {
-              //   dispatch(authSlice.actions.authUserData(authUserResponse.data));
-              //   dispatch(authSlice.actions.loggedIn());
-              setSubmitting(false);
-              closeModal();
-              // }
-            }
+                  // closeModal();
+                  setStatus("ok");
+                }
+              });
+            setSubmitting(false);
+            // let req = await loginHandler({ data: reqValues });
+            // if (req.error) {
+            //   setStatus(req.error);
+            // }
+            // if (isSuccessLogin) {
+            //   // let authUserResponse = await getAuthUser();
+            //   // if (authUserResponse.data) {
+            //   //   dispatch(authSlice.actions.authUserData(authUserResponse.data));
+            //   //   dispatch(authSlice.actions.loggedIn());
+            //   setSubmitting(false);
+            //   closeModal();
+            //   // }
+            // }
           } catch (err) {
             setStatus(err);
             setSubmitting(false);
@@ -88,7 +89,9 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             >
               <PasswordSVG styles="group-hover:fill-activeBtn transition-colors duration-100" />
             </Input>
-            <div className="text-black">{status}</div>
+            <div className="text-black">
+              {authUser ? authUser?.name : "lol"}
+            </div>
             <PrimeryButton type={"submit"} customStyles="w-full">
               {isLoadingLogin ? <Spiner /> : "Войти"}
             </PrimeryButton>
