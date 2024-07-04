@@ -18,7 +18,7 @@ export default function RequireAuth({
   const { isAuthenticated } = useAuthSelector();
 
   // const [getAuthUserHandler] = useLazyGetAuthUserQuery();
-  const { data } = useGetAuthUserQuery();
+  const { data, isLoading } = useGetAuthUserQuery();
   const dispatch = useDispatch();
   useEffect(() => {
     // const loadUser = async () => {
@@ -31,7 +31,7 @@ export default function RequireAuth({
     //   }
     // };
     // loadUser();
-    if (!isAuthenticated) location.push("/login");
+    if (!data && !isLoading) location.push("/login");
     if (data) {
       dispatch(authSlice.actions.authUserData(data));
       dispatch(authSlice.actions.loggedIn());
