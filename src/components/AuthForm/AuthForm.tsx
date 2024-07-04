@@ -8,10 +8,26 @@ import Input from "@/shared/components/Input/Input";
 import PrimeryButton from "@/shared/components/PrimeryButton/PrimeryButton";
 import Spiner from "@/shared/components/Spiner/Spiner";
 import { Formik, Form } from "formik";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 export default function AuthForm({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
+  const [isLogin, setIslogin] = useState<boolean>(false);
+  useEffect(() => {
+    if (isLogin) {
+      const func = async () => {
+        let authUserResponse = await getAuthUser();
+
+        if (authUserResponse.data) {
+          dispatch(authSlice.actions.authUserData(authUserResponse.data));
+          dispatch(authSlice.actions.loggedIn());
+          closeModal();
+        }
+      };
+      func();
+    }
+  }, [isLogin]);
 
   const [
     loginHandler,
@@ -35,21 +51,22 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
               password: value.password,
             };
 
-            let req = await loginHandler({ data: reqValues })
-              .unwrap()
-              .then(async (data) => {
-                if (data.result) {
-                  let authUserResponse = await getAuthUser();
+            let req = await loginHandler({ data: reqValues });
+            setIslogin(true);
+            // .unwrap()
+            // .then(async (data) => {
+            //   if (data.result) {
+            //     let authUserResponse = await getAuthUser();
 
-                  if (authUserResponse.data) {
-                    dispatch(
-                      authSlice.actions.authUserData(authUserResponse.data)
-                    );
-                    dispatch(authSlice.actions.loggedIn());
-                    closeModal();
-                  }
-                }
-              });
+            //     if (authUserResponse.data) {
+            //       dispatch(
+            //         authSlice.actions.authUserData(authUserResponse.data)
+            //       );
+            //       dispatch(authSlice.actions.loggedIn());
+            //       closeModal();
+            //     }
+            //   }
+            // });
           } catch (err) {
             setStatus(err);
             setSubmitting(false);
