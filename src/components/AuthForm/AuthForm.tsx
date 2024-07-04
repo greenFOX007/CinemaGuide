@@ -15,7 +15,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
   const [isLogin, setIslogin] = useState<boolean>(false);
   useEffect(() => {
-    if (isLogin) {
+    if (isLogin === true) {
       const func = async () => {
         let authUserResponse = await getAuthUser();
 
@@ -52,7 +52,8 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             };
 
             let req = await loginHandler({ data: reqValues });
-            setIslogin(true);
+            if (req.data) setIslogin(true);
+
             // .unwrap()
             // .then(async (data) => {
             //   if (data.result) {
