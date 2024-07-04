@@ -7,6 +7,7 @@ import { EmailSVG, PasswordSVG } from "@/shared/IconsSvg";
 import Input from "@/shared/components/Input/Input";
 import PrimeryButton from "@/shared/components/PrimeryButton/PrimeryButton";
 import Spiner from "@/shared/components/Spiner/Spiner";
+import httpClient from "@/utils/axios";
 import { Formik, Form } from "formik";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -26,52 +27,72 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
 
   const [getAuthUser, { isSuccess, isLoading }] = useLazyGetAuthUserQuery();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      getAuthUser()
-        .then((data) => {
-          data.data && dispatch(authSlice.actions.authUserData(data.data));
-          // console.log(data);
-          closeModal();
-        })
-        .catch(() => {
-          throw new Error("lol");
-        });
-    }
-  }, [isAuthenticated]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     getAuthUser()
+  //       .then((data) => {
+  //         data.data && dispatch(authSlice.actions.authUserData(data.data));
+  //         // console.log(data);
+  //         closeModal();
+  //       })
+  //       .catch(() => {
+  //         throw new Error("lol");
+  //       });
+  //   }
+  // }, [isAuthenticated]);
   return (
     <div className="opacity-0-0 transition-all duration-700">
       <Formik
         initialValues={{ email: "", password: "" }}
         onSubmit={async (value, { setSubmitting, setStatus }) => {
-          try {
-            setSubmitting(true);
-            const reqValues = {
-              email: value.email,
-              password: value.password,
-            };
+          const reqValues = {
+            email: value.email,
+            password: value.password,
+          };
+          httpClient
+            .post("/auth/login", reqValues)
+            .then((data) => {
+              if (data.data) {
+                return httpClient.get("/profile");
+              }
+            })
+            .then((data1) => {
+              if (data1?.data) {
+                dispatch(authSlice.actions.authUserData(data1.data));
+                dispatch(authSlice.actions.loggedIn());
 
-            let req = await loginHandler({ data: reqValues });
-            if (req.data) {
-              dispatch(authSlice.actions.loggedIn());
-            }
-            // .unwrap()
-            // .then(async () => {
-            //   let authUserResponse = await getAuthUser();
-            //   if (authUserResponse.data) {
-            //     dispatch(
-            //       authSlice.actions.authUserData(authUserResponse.data)
-            //     );
-            //     dispatch(authSlice.actions.loggedIn());
+                closeModal();
+                setSubmitting(false);
+              }
+            });
+          // try {
+          //   setSubmitting(true);
+          //   const reqValues = {
+          //     email: value.email,
+          //     password: value.password,
+          //   };
 
-            //     closeModal();
-            //     setSubmitting(false);
-            //   }
-            // });
-          } catch (err) {
-            setStatus(err);
-            setSubmitting(false);
-          }
+          //   let req = await loginHandler({ data: reqValues });
+          //   if (req.data) {
+          //     dispatch(authSlice.actions.loggedIn());
+          //   }
+          //   // .unwrap()
+          //   // .then(async () => {
+          //   //   let authUserResponse = await getAuthUser();
+          //   //   if (authUserResponse.data) {
+          //   //     dispatch(
+          //   //       authSlice.actions.authUserData(authUserResponse.data)
+          //   //     );
+          //   //     dispatch(authSlice.actions.loggedIn());
+
+          //   //     closeModal();
+          //   //     setSubmitting(false);
+          //   //   }
+          //   // });
+          // } catch (err) {
+          //   setStatus(err);
+          //   setSubmitting(false);
+          // }
         }}
       >
         {({ status, handleSubmit }) => (
