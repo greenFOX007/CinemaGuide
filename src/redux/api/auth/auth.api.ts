@@ -20,6 +20,7 @@ const authApi = baseApi.injectEndpoints({
         url: "/auth/login",
         data,
       }),
+      invalidatesTags: [ETagTypes.GET_AUTH_USER],
     }),
     getAuthUser: builder.query<GetAuthUser.Response, GetAuthUser.Payload>({
       query: () => ({

@@ -15,7 +15,7 @@ import { date } from "yup";
 
 export default function AuthForm({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
-  const { authUser } = useAuthSelector();
+  const { isAuthenticated } = useAuthSelector();
   const [dataLol, setDataLol] = useState<any>();
 
   const [
@@ -43,19 +43,22 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             let req = await loginHandler({ data: reqValues });
             // setDataLol(req);
             // console.log(req);
+            // if (req.data) {
+            //   let authUserResponse = await getAuthUser();
+            //   if (authUserResponse.data) setDataLol(authUserResponse);
+            //   // if (authUserResponse.data) {
+            //   //   await dispatch(
+            //   //     authSlice.actions.authUserData(authUserResponse.data)
+            //   //   );
+            //   //   await dispatch(authSlice.actions.loggedIn());
+            //   // }
+            // }
             if (req.data) {
-              let authUserResponse = await getAuthUser();
-              if (authUserResponse.data) setDataLol(authUserResponse);
-              // if (authUserResponse.data) {
-              //   await dispatch(
-              //     authSlice.actions.authUserData(authUserResponse.data)
-              //   );
-              //   await dispatch(authSlice.actions.loggedIn());
-              // }
+              dispatch(authSlice.actions.loggedIn());
+              // closeModal();
+              setSubmitting(false);
             }
 
-            // closeModal();
-            setSubmitting(false);
             // closeModal();
 
             // let req = await loginHandler({ data: reqValues })
@@ -113,8 +116,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
               <PasswordSVG styles="group-hover:fill-activeBtn transition-colors duration-100" />
             </Input>
             <div className="text-black">
-              {/* {authUser ? authUser?.name : "lol"} */}
-              {JSON.stringify(dataLol)}
+              {isAuthenticated ? String(isAuthenticated) : "lol"}
             </div>
             <PrimeryButton type={"submit"} customStyles="w-full">
               {isLoadingLogin ? <Spiner /> : "Войти"}
