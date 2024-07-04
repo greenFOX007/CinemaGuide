@@ -35,31 +35,32 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
               password: value.password,
             };
 
-            let req = await loginHandler({ data: reqValues })
-              .unwrap()
-              .then(async () => {
-                let authUserResponse = await getAuthUser();
+            // let req = await loginHandler({ data: reqValues })
+            //   .unwrap()
+            //   .then(async () => {
+            //     let authUserResponse = await getAuthUser();
 
-                if (authUserResponse.data) {
-                  dispatch(
-                    authSlice.actions.authUserData(authUserResponse.data)
-                  );
-                  dispatch(authSlice.actions.loggedIn());
+            //     if (authUserResponse.data) {
+            //       dispatch(
+            //         authSlice.actions.authUserData(authUserResponse.data)
+            //       );
+            //       dispatch(authSlice.actions.loggedIn());
 
-                  // closeModal();
-                  setStatus("ok");
-                }
-              });
-            setSubmitting(false);
-            // let req = await loginHandler({ data: reqValues });
-            // if (req.data) {
-            //   let authUserResponse = await getAuthUser();
-            //   if (authUserResponse.data) {
-            //     dispatch(authSlice.actions.authUserData(authUserResponse.data));
-            //     dispatch(authSlice.actions.loggedIn());
-            //     closeModal();
-            //   }
-            // }
+            //       // closeModal();
+            //       setStatus("ok");
+            //     }
+            //   });
+            // setSubmitting(false);
+            let req = await loginHandler({ data: reqValues });
+            if (req.data) {
+              let authUserResponse = await getAuthUser();
+              if (authUserResponse.data) {
+                dispatch(authSlice.actions.authUserData(authUserResponse.data));
+                dispatch(authSlice.actions.loggedIn());
+                // closeModal();
+                setStatus("ok");
+              }
+            }
           } catch (err) {
             setStatus(err);
             setSubmitting(false);
