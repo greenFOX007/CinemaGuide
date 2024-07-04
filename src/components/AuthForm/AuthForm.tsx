@@ -7,14 +7,11 @@ import { EmailSVG, PasswordSVG } from "@/shared/IconsSvg";
 import Input from "@/shared/components/Input/Input";
 import PrimeryButton from "@/shared/components/PrimeryButton/PrimeryButton";
 import Spiner from "@/shared/components/Spiner/Spiner";
-import httpClient from "@/utils/axios";
 import { Formik, Form } from "formik";
-import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 export default function AuthForm({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
-  const { isAuthenticated, authUser } = useAuthSelector();
 
   const [
     loginHandler,
@@ -25,8 +22,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
     },
   ] = useLoginMutation();
 
-  const [getAuthUser, { isSuccess, isLoading }] = useLazyGetAuthUserQuery();
-
+  const [getAuthUser] = useLazyGetAuthUserQuery();
   return (
     <div className="opacity-0-0 transition-all duration-700">
       <Formik
@@ -39,34 +35,29 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
               password: value.password,
             };
 
-            let req = await loginHandler({ data: reqValues });
-            if (req.data) {
-              dispatch(authSlice.actions.loggedIn());
-              setSubmitting(false);
-              closeModal();
-            }
-            // .unwrap()
-            // .then(async () => {
-            //   let authUserResponse = await getAuthUser();
-            //   setStatus(JSON.stringify(authUserResponse));
-            //   if (authUserResponse.data) {
-            //     dispatch(
-            //       authSlice.actions.authUserData(authUserResponse.data)
-            //     );
-            //     dispatch(authSlice.actions.loggedIn());
+            let req = await loginHandler({ data: reqValues })
+              .unwrap()
+              .then(async (data) => {
+                if (data.result) {
+                  let authUserResponse = await getAuthUser();
 
-            //     closeModal();
-            //     setSubmitting(false);
-            //   }
-            // });
+                  if (authUserResponse.data) {
+                    dispatch(
+                      authSlice.actions.authUserData(authUserResponse.data)
+                    );
+                    dispatch(authSlice.actions.loggedIn());
+                    closeModal();
+                  }
+                }
+              });
           } catch (err) {
             setStatus(err);
             setSubmitting(false);
           }
         }}
       >
-        {({ status, handleSubmit }) => (
-          <Form onSubmit={handleSubmit} className="overflow-y-hidden relative">
+        {({ status }) => (
+          <Form className="overflow-y-hidden relative">
             <Input
               styles="mb-3"
               placeholder="Электронная почта"
@@ -83,8 +74,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             >
               <PasswordSVG styles="group-hover:fill-activeBtn transition-colors duration-100" />
             </Input>
-            <div className="text-black">{status}</div>
-            <PrimeryButton type={"submit"} customStyles="w-full">
+            <PrimeryButton type="submit" customStyles="w-full">
               {isLoadingLogin ? <Spiner /> : "Войти"}
             </PrimeryButton>
             <div className="flex justify-center mt-6 relative">

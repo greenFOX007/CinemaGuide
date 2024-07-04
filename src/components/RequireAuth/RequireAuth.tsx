@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  useGetAuthUserQuery,
-  useLazyGetAuthUserQuery,
-} from "@/redux/api/auth/auth.api";
+import { useLazyGetAuthUserQuery } from "@/redux/api/auth/auth.api";
 import { authSlice, useAuthSelector } from "@/redux/slices/auth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -17,26 +14,20 @@ export default function RequireAuth({
   const location = useRouter();
   const { isAuthenticated } = useAuthSelector();
 
-  // const [getAuthUserHandler] = useLazyGetAuthUserQuery();
-  const { data, isLoading } = useGetAuthUserQuery();
+  const [getAuthUserHandler] = useLazyGetAuthUserQuery();
   const dispatch = useDispatch();
   useEffect(() => {
-    // const loadUser = async () => {
-    //   let userResponse = await getAuthUserHandler();
-    //   if (userResponse.data) {
-    //     dispatch(authSlice.actions.authUserData(userResponse.data));
-    //     dispatch(authSlice.actions.loggedIn());
-    //   } else {
-    //     location.push("/login");
-    //   }
-    // };
-    // loadUser();
-    if (!data && !isLoading) location.push("/login");
-    if (data) {
-      dispatch(authSlice.actions.authUserData(data));
-      dispatch(authSlice.actions.loggedIn());
-    }
-  }, [data]);
+    const loadUser = async () => {
+      let userResponse = await getAuthUserHandler();
+      if (userResponse.data) {
+        dispatch(authSlice.actions.authUserData(userResponse.data));
+        dispatch(authSlice.actions.loggedIn());
+      } else {
+        location.push("/");
+      }
+    };
+    loadUser();
+  }, []);
 
   return isAuthenticated ? children : "";
 }
