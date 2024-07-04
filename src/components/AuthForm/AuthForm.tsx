@@ -14,25 +14,25 @@ import { useDispatch } from "react-redux";
 
 export default function AuthForm({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
-  const [isLogin, setIslogin] = useState<boolean>(false);
-  const [info, setInfo] = useState<any>();
-  useEffect(() => {
-    if (isLogin === true) {
-      const func = async () => {
-        let authUserResponse = await getAuthUser();
-        setInfo(authUserResponse);
+  // const [isLogin, setIslogin] = useState<boolean>(false);
+  // const [info, setInfo] = useState<any>();
+  // useEffect(() => {
+  //   if (isLogin === true) {
+  //     const func = async () => {
+  //       let authUserResponse = await getAuthUser();
+  //       setInfo(authUserResponse);
 
-        if (authUserResponse.data) {
-          dispatch(authSlice.actions.authUserData(authUserResponse.data));
-          dispatch(authSlice.actions.loggedIn());
-          // closeModal();
-        }
-      };
-      setTimeout(() => {
-        func();
-      }, 0);
-    }
-  }, [isLogin]);
+  //       if (authUserResponse.data) {
+  //         dispatch(authSlice.actions.authUserData(authUserResponse.data));
+  //         dispatch(authSlice.actions.loggedIn());
+  //         // closeModal();
+  //       }
+  //     };
+  //     setTimeout(() => {
+  //       func();
+  //     }, 0);
+  //   }
+  // }, [isLogin]);
 
   const [
     loginHandler,
@@ -57,7 +57,10 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             };
 
             let req = await loginHandler({ data: reqValues });
-            if (req.data) setIslogin(true);
+            if (req.data) {
+              dispatch(authSlice.actions.loggedIn());
+              closeModal();
+            }
 
             // .unwrap()
             // .then(async (data) => {
@@ -97,7 +100,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             >
               <PasswordSVG styles="group-hover:fill-activeBtn transition-colors duration-100" />
             </Input>
-            <div className="text-black">{JSON.stringify(info)}</div>
+            {/* <div className="text-black">{JSON.stringify(info)}</div> */}
             <PrimeryButton type="submit" customStyles="w-full">
               {isLoadingLogin ? <Spiner /> : "Войти"}
             </PrimeryButton>
