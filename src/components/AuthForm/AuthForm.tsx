@@ -22,7 +22,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
     },
   ] = useLoginMutation();
 
-  const [getAuthUser, { isLoading }] = useLazyGetAuthUserQuery();
+  const [getAuthUser] = useLazyGetAuthUserQuery();
   return (
     <div className="opacity-0-0 transition-all duration-700">
       <Formik
@@ -45,6 +45,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
                     authSlice.actions.authUserData(authUserResponse.data)
                   );
                   dispatch(authSlice.actions.loggedIn());
+                  alert("ok");
                   closeModal();
                 }
               });
@@ -82,8 +83,6 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             >
               <PasswordSVG styles="group-hover:fill-activeBtn transition-colors duration-100" />
             </Input>
-            <div>{isSuccessLogin}</div>
-            <div>{isLoading}</div>
             <PrimeryButton type={"submit"} customStyles="w-full">
               {isLoadingLogin ? <Spiner /> : "Войти"}
             </PrimeryButton>
