@@ -7,9 +7,11 @@ import { EmailSVG, PasswordSVG } from "@/shared/IconsSvg";
 import Input from "@/shared/components/Input/Input";
 import PrimeryButton from "@/shared/components/PrimeryButton/PrimeryButton";
 import Spiner from "@/shared/components/Spiner/Spiner";
+import httpClient from "@/utils/axios";
 import { Formik, Form } from "formik";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { date } from "yup";
 
 export default function AuthForm({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
@@ -38,23 +40,35 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
               password: value.password,
             };
 
-            let req = await loginHandler({ data: reqValues })
-              .unwrap()
-              .then(async () => {
-                let authUserResponse = await getAuthUser();
-                setDataLol(authUserResponse.data);
+            let req = await httpClient.post("/auth/login", reqValues);
+            // console.log(req);
+            if (req.data) {
+              let authUserResponse = await httpClient.get("/profile");
+              if (authUserResponse.data) {
+                dispatch(authSlice.actions.authUserData(authUserResponse.data));
+                dispatch(authSlice.actions.loggedIn());
+                setSubmitting(false);
+                closeModal();
+              }
+            }
 
-                if (authUserResponse.data) {
-                  dispatch(
-                    authSlice.actions.authUserData(authUserResponse.data)
-                  );
-                  dispatch(authSlice.actions.loggedIn());
+            // let req = await loginHandler({ data: reqValues })
+            //   .unwrap()
+            //   .then(async () => {
+            //     let authUserResponse = await getAuthUser();
+            //     setDataLol(authUserResponse.data);
 
-                  // closeModal();
-                  setStatus("ok");
-                }
-              });
-            setSubmitting(false);
+            //     if (authUserResponse.data) {
+            //       dispatch(
+            //         authSlice.actions.authUserData(authUserResponse.data)
+            //       );
+            //       dispatch(authSlice.actions.loggedIn());
+
+            //       // closeModal();
+            //       setStatus("ok");
+            //     }
+            //   });
+            // setSubmitting(false);
             // let req = await loginHandler({ data: reqValues });
             // if (req.error) {
             //   setStatus(req.error);
