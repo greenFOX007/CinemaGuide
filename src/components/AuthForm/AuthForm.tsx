@@ -41,6 +41,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
 
             let req = await loginHandler({ data: reqValues });
             if (req.data) {
+              dispatch(authSlice.actions.loggedIn());
               setSubmitting(false);
               closeModal();
             }
