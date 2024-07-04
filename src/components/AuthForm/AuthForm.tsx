@@ -27,7 +27,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
     },
   ] = useLoginMutation();
 
-  const [getAuthUser] = useLazyGetAuthUserQuery();
+  const [getAuthUser, { isSuccess, isLoading }] = useLazyGetAuthUserQuery();
   return (
     <div className="opacity-0-0 transition-all duration-700">
       <Formik
@@ -40,12 +40,12 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
               password: value.password,
             };
 
-            let req = await httpClient.post("/auth/login", reqValues);
-
+            let req = await loginHandler({ data: reqValues });
+            // setDataLol(req);
             // console.log(req);
-            if (req.data.result === true) {
-              let authUserResponse = await httpClient.get("/profile");
-              setDataLol(authUserResponse);
+            if (req.data) {
+              let authUserResponse = await getAuthUser();
+              if (authUserResponse.data) setDataLol(authUserResponse);
               // if (authUserResponse.data) {
               //   await dispatch(
               //     authSlice.actions.authUserData(authUserResponse.data)
