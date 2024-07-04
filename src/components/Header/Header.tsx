@@ -54,6 +54,8 @@ export default function Header() {
         >
           {isAuthenticated ? authUser?.name : "Войти"}
         </Link>
+        {String(isAuthenticated)}
+        {JSON.stringify(authUser)}
       </header>
     </>
   );
