@@ -41,17 +41,18 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             };
 
             let req = await httpClient.post("/auth/login", reqValues);
-            setDataLol(req);
+
             // console.log(req);
-            // if (req.data) {
-            //   let authUserResponse = await httpClient.get("/profile");
-            // if (authUserResponse.data) {
-            //   await dispatch(
-            //     authSlice.actions.authUserData(authUserResponse.data)
-            //   );
-            //   await dispatch(authSlice.actions.loggedIn());
-            // }
-            // }
+            if (req.data.result === true) {
+              let authUserResponse = await httpClient.get("/profile");
+              setDataLol(authUserResponse);
+              // if (authUserResponse.data) {
+              //   await dispatch(
+              //     authSlice.actions.authUserData(authUserResponse.data)
+              //   );
+              //   await dispatch(authSlice.actions.loggedIn());
+              // }
+            }
 
             // closeModal();
             setSubmitting(false);
