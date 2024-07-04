@@ -15,10 +15,12 @@ import { useDispatch } from "react-redux";
 export default function AuthForm({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
   const [isLogin, setIslogin] = useState<boolean>(false);
+  const [info, setInfo] = useState<any>();
   useEffect(() => {
     if (isLogin === true) {
       const func = async () => {
         let authUserResponse = await getAuthUser();
+        setInfo(authUserResponse);
 
         if (authUserResponse.data) {
           dispatch(authSlice.actions.authUserData(authUserResponse.data));
@@ -95,7 +97,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             >
               <PasswordSVG styles="group-hover:fill-activeBtn transition-colors duration-100" />
             </Input>
-            <div className="text-black">{String(isLogin)}</div>
+            <div className="text-black">{JSON.stringify(info)}</div>
             <PrimeryButton type="submit" customStyles="w-full">
               {isLoadingLogin ? <Spiner /> : "Войти"}
             </PrimeryButton>
