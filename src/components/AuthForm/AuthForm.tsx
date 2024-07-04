@@ -22,7 +22,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
     },
   ] = useLoginMutation();
 
-  const [getAuthUser] = useLazyGetAuthUserQuery();
+  const [getAuthUser, { isLoading }] = useLazyGetAuthUserQuery();
   return (
     <div className="opacity-0-0 transition-all duration-700">
       <Formik
@@ -35,35 +35,36 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
               password: value.password,
             };
 
-            // let req = await loginHandler({ data: reqValues })
-            //   .unwrap()
-            //   .then(async () => {
-            //     let authUserResponse = await getAuthUser();
+            let req = await loginHandler({ data: reqValues })
+              .unwrap()
+              .then(async () => {
+                let authUserResponse = await getAuthUser();
 
-            //     if (authUserResponse.data) {
-            //       dispatch(
-            //         authSlice.actions.authUserData(authUserResponse.data)
-            //       );
-            //       dispatch(authSlice.actions.loggedIn());
-            //       closeModal();
-            //     }
-            //   });
-            let req = await loginHandler({ data: reqValues });
-            if (req.data) {
-              let authUserResponse = await getAuthUser();
-              if (authUserResponse.data) {
-                dispatch(authSlice.actions.authUserData(authUserResponse.data));
-                dispatch(authSlice.actions.loggedIn());
-                closeModal();
-              }
-            }
+                if (authUserResponse.data) {
+                  dispatch(
+                    authSlice.actions.authUserData(authUserResponse.data)
+                  );
+                  dispatch(authSlice.actions.loggedIn());
+                  closeModal();
+                }
+              });
+            setSubmitting(false);
+            // let req = await loginHandler({ data: reqValues });
+            // if (req.data) {
+            //   let authUserResponse = await getAuthUser();
+            //   if (authUserResponse.data) {
+            //     dispatch(authSlice.actions.authUserData(authUserResponse.data));
+            //     dispatch(authSlice.actions.loggedIn());
+            //     closeModal();
+            //   }
+            // }
           } catch (err) {
             setStatus(err);
             setSubmitting(false);
           }
         }}
       >
-        {({ status, submitForm }) => (
+        {({ status }) => (
           <Form className="overflow-y-hidden relative">
             <Input
               styles="mb-3"
@@ -81,11 +82,9 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             >
               <PasswordSVG styles="group-hover:fill-activeBtn transition-colors duration-100" />
             </Input>
-            <PrimeryButton
-              onClick={submitForm}
-              // type="submit"
-              customStyles="w-full"
-            >
+            <div>{isSuccessLogin}</div>
+            <div>{isLoading}</div>
+            <PrimeryButton type={"submit"} customStyles="w-full">
               {isLoadingLogin ? <Spiner /> : "Войти"}
             </PrimeryButton>
             <div className="flex justify-center mt-6 relative">
