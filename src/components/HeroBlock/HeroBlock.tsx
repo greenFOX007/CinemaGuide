@@ -22,7 +22,7 @@ export default function HeroBlock() {
   const [data, setData] = useState<Movie | null>(null);
   const [getRandomMovieHandler, { isLoading, isSuccess }] =
     useLazyGetRandomMovieQuery();
-  const { isAuthenticated, authUser } = useAuthSelector();
+  const { isAuthenticated } = useAuthSelector();
   const [addFavoritesHandler] = useAddFavoritesMutation();
   const { data: userFavorites } = useGetAuthUserQuery();
   const [isInFavorites, setIsInFavorites] = useState(false);
@@ -81,10 +81,6 @@ export default function HeroBlock() {
               </h1>
               <p className="text-[24px] max-[640px]:text-lg">
                 {data.plot.split(".")[0]}
-              </p>
-              <p>
-                {String(isAuthenticated)}
-                {JSON.stringify(authUser)}
               </p>
             </div>
             <div className=" flex gap-4 flex-wrap">
