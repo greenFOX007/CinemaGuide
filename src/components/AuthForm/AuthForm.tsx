@@ -71,7 +71,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
           }
         }}
       >
-        {({ status }) => (
+        {({ status, values }) => (
           <Form className="overflow-y-hidden relative">
             <Input
               styles="mb-3"
@@ -90,7 +90,8 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
               <PasswordSVG styles="group-hover:fill-activeBtn transition-colors duration-100" />
             </Input>
             <div className="text-black">
-              {authUser ? authUser?.name : "lol"}
+              {/* {authUser ? authUser?.name : "lol"} */}
+              {values.email}
             </div>
             <PrimeryButton type={"submit"} customStyles="w-full">
               {isLoadingLogin ? <Spiner /> : "Войти"}
