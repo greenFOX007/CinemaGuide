@@ -42,17 +42,19 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             let req = await loginHandler({ data: reqValues })
               .unwrap()
               .then(async () => {
-                let authUserResponse = await getAuthUser();
-                setStatus(JSON.stringify(authUserResponse));
-                if (authUserResponse.data) {
-                  dispatch(
-                    authSlice.actions.authUserData(authUserResponse.data)
-                  );
-                  dispatch(authSlice.actions.loggedIn());
+                setTimeout(async () => {
+                  let authUserResponse = await getAuthUser();
+                  setStatus(JSON.stringify(authUserResponse));
+                  if (authUserResponse.data) {
+                    dispatch(
+                      authSlice.actions.authUserData(authUserResponse.data)
+                    );
+                    dispatch(authSlice.actions.loggedIn());
 
-                  closeModal();
-                  setSubmitting(false);
-                }
+                    closeModal();
+                    setSubmitting(false);
+                  }
+                }, 300);
               });
           } catch (err) {
             setStatus(err);
