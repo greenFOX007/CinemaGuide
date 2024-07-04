@@ -8,11 +8,13 @@ import Input from "@/shared/components/Input/Input";
 import PrimeryButton from "@/shared/components/PrimeryButton/PrimeryButton";
 import Spiner from "@/shared/components/Spiner/Spiner";
 import { Formik, Form } from "formik";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 
 export default function AuthForm({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
   const { authUser } = useAuthSelector();
+  const [dataLol, setDataLol] = useState<any>();
 
   const [
     loginHandler,
@@ -40,6 +42,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
               .unwrap()
               .then(async () => {
                 let authUserResponse = await getAuthUser();
+                setDataLol(authUserResponse.data);
 
                 if (authUserResponse.data) {
                   dispatch(
@@ -91,7 +94,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             </Input>
             <div className="text-black">
               {/* {authUser ? authUser?.name : "lol"} */}
-              {values.email}
+              {dataLol?.email}
             </div>
             <PrimeryButton type={"submit"} customStyles="w-full">
               {isLoadingLogin ? <Spiner /> : "Войти"}
