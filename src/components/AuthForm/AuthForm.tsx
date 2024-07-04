@@ -52,14 +52,17 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             //   });
             // setSubmitting(false);
             let req = await loginHandler({ data: reqValues });
-            if (req.data) {
-              let authUserResponse = await getAuthUser();
-              if (authUserResponse.data) {
-                dispatch(authSlice.actions.authUserData(authUserResponse.data));
-                dispatch(authSlice.actions.loggedIn());
-                // closeModal();
-                setStatus("ok");
-              }
+            if (req.error) {
+              setStatus(req.error);
+            }
+            if (isSuccessLogin) {
+              // let authUserResponse = await getAuthUser();
+              // if (authUserResponse.data) {
+              //   dispatch(authSlice.actions.authUserData(authUserResponse.data));
+              //   dispatch(authSlice.actions.loggedIn());
+              setSubmitting(false);
+              closeModal();
+              // }
             }
           } catch (err) {
             setStatus(err);
