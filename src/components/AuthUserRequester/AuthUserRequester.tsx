@@ -21,5 +21,10 @@ export default function AuthUserRequester({
     };
     loadUser();
   }, []);
-  return children;
+  return (
+    <>
+      <h2 className="text-red-600">{data?.name}</h2>
+      {children}
+    </>
+  );
 }
