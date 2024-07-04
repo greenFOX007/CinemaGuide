@@ -14,16 +14,16 @@ export default function RequireAuth({
   const location = useRouter();
   const { isAuthenticated } = useAuthSelector();
 
-  const [getAuthUserHandler, { isSuccess }] = useLazyGetAuthUserQuery();
+  const [getAuthUserHandler] = useLazyGetAuthUserQuery();
   const dispatch = useDispatch();
   useEffect(() => {
     const loadUser = async () => {
       let userResponse = await getAuthUserHandler();
-      if (isSuccess && userResponse.data) {
+      if (userResponse.data) {
         dispatch(authSlice.actions.authUserData(userResponse.data));
         dispatch(authSlice.actions.loggedIn());
       } else {
-        location.push("/");
+        location.push("/login");
       }
     };
     loadUser();

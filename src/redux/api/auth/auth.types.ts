@@ -16,7 +16,7 @@ export type ILoginPayload = {
   };
 };
 
-export type ILoginResponse = { result: boolean };
+export type ILoginResponse = void;
 
 export type IGetAuthUserPayload = void;
 

@@ -25,7 +25,6 @@ export default function MovieHero({ id }: { id: number }) {
   const [addFavoritesHandler] = useAddFavoritesMutation();
   const [isInFavorites, setIsInFavorites] = useState(false);
   const { data: authUser } = useGetAuthUserQuery();
-  console.log(isAuthenticated);
 
   useEffect(() => {
     if (authUser && data) {
@@ -38,7 +37,7 @@ export default function MovieHero({ id }: { id: number }) {
   }, [isError]);
 
   const handleAddFavorite = () => {
-    if (authUser) {
+    if (isAuthenticated) {
       return addFavoritesHandler({ id: String(id) });
     } else {
       router.push("/login");
