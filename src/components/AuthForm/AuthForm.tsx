@@ -41,18 +41,20 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             };
 
             let req = await httpClient.post("/auth/login", reqValues);
+            setDataLol(req);
             // console.log(req);
-            if (req.data) {
-              let authUserResponse = await httpClient.get("/profile");
-              if (authUserResponse.data) {
-                await dispatch(
-                  authSlice.actions.authUserData(authUserResponse.data)
-                );
-                await dispatch(authSlice.actions.loggedIn());
-              }
-            }
+            // if (req.data) {
+            //   let authUserResponse = await httpClient.get("/profile");
+            // if (authUserResponse.data) {
+            //   await dispatch(
+            //     authSlice.actions.authUserData(authUserResponse.data)
+            //   );
+            //   await dispatch(authSlice.actions.loggedIn());
+            // }
+            // }
+
+            // closeModal();
             setSubmitting(false);
-            closeModal();
             // closeModal();
 
             // let req = await loginHandler({ data: reqValues })
@@ -111,7 +113,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             </Input>
             <div className="text-black">
               {/* {authUser ? authUser?.name : "lol"} */}
-              {dataLol?.email}
+              {JSON.stringify(dataLol)}
             </div>
             <PrimeryButton type={"submit"} customStyles="w-full">
               {isLoadingLogin ? <Spiner /> : "Войти"}
