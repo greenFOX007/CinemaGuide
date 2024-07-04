@@ -8,6 +8,7 @@ import Input from "@/shared/components/Input/Input";
 import PrimeryButton from "@/shared/components/PrimeryButton/PrimeryButton";
 import Spiner from "@/shared/components/Spiner/Spiner";
 import { Formik, Form } from "formik";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 export default function AuthForm({ closeModal }: { closeModal: () => void }) {
@@ -22,6 +23,18 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
     },
   ] = useLoginMutation();
 
+  useEffect(() => {
+    if (isSuccessLogin) {
+      getAuthUser().then((data) => {
+        if (data.data) {
+          dispatch(authSlice.actions.authUserData(data?.data));
+          dispatch(authSlice.actions.loggedIn());
+          closeModal();
+        }
+      });
+    }
+  }, [isSuccessLogin]);
+
   const [getAuthUser] = useLazyGetAuthUserQuery();
   return (
     <div className="opacity-0-0 transition-all duration-700">
@@ -35,17 +48,17 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
               password: value.password,
             };
 
-            let req: any = await loginHandler({ data: reqValues }).unwrap();
-            // console.log(req);
-            if (req.result == true) {
-              let authUserResponse = await getAuthUser();
+            let req = await loginHandler({ data: reqValues });
+            // console.log(isLoadingLogin);
+            // if (isSuccessLogin) {
+            //   let authUserResponse = await getAuthUser();
 
-              if (authUserResponse.data) {
-                dispatch(authSlice.actions.authUserData(authUserResponse.data));
-                dispatch(authSlice.actions.loggedIn());
-                closeModal();
-              }
-            }
+            //   if (authUserResponse.data) {
+            //     dispatch(authSlice.actions.authUserData(authUserResponse.data));
+            //     dispatch(authSlice.actions.loggedIn());
+            //     closeModal();
+            //   }
+            // }
           } catch (err) {
             setStatus(err);
             setSubmitting(false);
