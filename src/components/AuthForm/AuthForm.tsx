@@ -27,72 +27,37 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
 
   const [getAuthUser, { isSuccess, isLoading }] = useLazyGetAuthUserQuery();
 
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     getAuthUser()
-  //       .then((data) => {
-  //         data.data && dispatch(authSlice.actions.authUserData(data.data));
-  //         // console.log(data);
-  //         closeModal();
-  //       })
-  //       .catch(() => {
-  //         throw new Error("lol");
-  //       });
-  //   }
-  // }, [isAuthenticated]);
   return (
     <div className="opacity-0-0 transition-all duration-700">
       <Formik
         initialValues={{ email: "", password: "" }}
         onSubmit={async (value, { setSubmitting, setStatus }) => {
-          const reqValues = {
-            email: value.email,
-            password: value.password,
-          };
-          httpClient
-            .post("/auth/login", reqValues)
-            .then((data) => {
-              if (data.data) {
-                return httpClient.get("/profile");
-              }
-            })
-            .then((data1) => {
-              if (data1?.data) {
-                dispatch(authSlice.actions.authUserData(data1.data));
-                dispatch(authSlice.actions.loggedIn());
+          try {
+            setSubmitting(true);
+            const reqValues = {
+              email: value.email,
+              password: value.password,
+            };
 
-                closeModal();
-                setSubmitting(false);
-              }
-            });
-          // try {
-          //   setSubmitting(true);
-          //   const reqValues = {
-          //     email: value.email,
-          //     password: value.password,
-          //   };
+            let req = await loginHandler({ data: reqValues })
+              .unwrap()
+              .then(async () => {
+                let authUserResponse = await getAuthUser();
+                setStatus(JSON.stringify(authUserResponse));
+                if (authUserResponse.data) {
+                  dispatch(
+                    authSlice.actions.authUserData(authUserResponse.data)
+                  );
+                  dispatch(authSlice.actions.loggedIn());
 
-          //   let req = await loginHandler({ data: reqValues });
-          //   if (req.data) {
-          //     dispatch(authSlice.actions.loggedIn());
-          //   }
-          //   // .unwrap()
-          //   // .then(async () => {
-          //   //   let authUserResponse = await getAuthUser();
-          //   //   if (authUserResponse.data) {
-          //   //     dispatch(
-          //   //       authSlice.actions.authUserData(authUserResponse.data)
-          //   //     );
-          //   //     dispatch(authSlice.actions.loggedIn());
-
-          //   //     closeModal();
-          //   //     setSubmitting(false);
-          //   //   }
-          //   // });
-          // } catch (err) {
-          //   setStatus(err);
-          //   setSubmitting(false);
-          // }
+                  closeModal();
+                  setSubmitting(false);
+                }
+              });
+          } catch (err) {
+            setStatus(err);
+            setSubmitting(false);
+          }
         }}
       >
         {({ status, handleSubmit }) => (
@@ -113,11 +78,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             >
               <PasswordSVG styles="group-hover:fill-activeBtn transition-colors duration-100" />
             </Input>
-            <div className="text-black">
-              {/* {isAuthenticated ? String(isAuthenticated) : "lol"}
-              {authUser ? JSON.stringify(authUser) : "lol"}
-              {status ? JSON.stringify(status) : "lol"} */}
-            </div>
+            <div className="text-black">{status}</div>
             <PrimeryButton type={"submit"} customStyles="w-full">
               {isLoadingLogin ? <Spiner /> : "Войти"}
             </PrimeryButton>
