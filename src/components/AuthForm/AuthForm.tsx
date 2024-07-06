@@ -23,17 +23,17 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
     },
   ] = useLoginMutation();
 
-  useEffect(() => {
-    if (isSuccessLogin) {
-      getAuthUser().then((data) => {
-        if (data.data) {
-          dispatch(authSlice.actions.authUserData(data?.data));
-          dispatch(authSlice.actions.loggedIn());
-          closeModal();
-        }
-      });
-    }
-  }, [isSuccessLogin]);
+  // useEffect(() => {
+  //   if (isSuccessLogin) {
+  //     getAuthUser().then((data) => {
+  //       if (data.data) {
+  //         dispatch(authSlice.actions.authUserData(data?.data));
+  //         dispatch(authSlice.actions.loggedIn());
+  //         closeModal();
+  //       }
+  //     });
+  //   }
+  // }, [isSuccessLogin]);
 
   const [getAuthUser] = useLazyGetAuthUserQuery();
   return (
@@ -41,28 +41,74 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
       <Formik
         initialValues={{ email: "", password: "" }}
         onSubmit={async (value, { setSubmitting, setStatus }) => {
+          const reqValues = {
+            email: value.email,
+            password: value.password,
+          };
           try {
-            setSubmitting(true);
-            const reqValues = {
-              email: value.email,
-              password: value.password,
-            };
+            //   setSubmitting(true);
+            // const reqValues = {
+            //   email: value.email,
+            //   password: value.password,
+            // };
 
-            let req = await loginHandler({ data: reqValues });
-            // console.log(isLoadingLogin);
-            // if (isSuccessLogin) {
-            //   let authUserResponse = await getAuthUser();
+            //   let req = await loginHandler({ data: reqValues });
+            //   // console.log(isLoadingLogin);
+            //   // if (isSuccessLogin) {
+            //   //   let authUserResponse = await getAuthUser();
 
-            //   if (authUserResponse.data) {
-            //     dispatch(authSlice.actions.authUserData(authUserResponse.data));
-            //     dispatch(authSlice.actions.loggedIn());
-            //     closeModal();
-            //   }
-            // }
+            //   //   if (authUserResponse.data) {
+            //   //     dispatch(authSlice.actions.authUserData(authUserResponse.data));
+            //   //     dispatch(authSlice.actions.loggedIn());
+            //   //     closeModal();
+            //   //   }
+            //   // }
+            const res = await fetch(
+              "https://cinemaguide.skillbox.cc/auth/login",
+              {
+                method: "POST",
+                body: JSON.stringify(reqValues),
+                headers: { "Content-Type": "application/json" },
+                cache: "no-store",
+                credentials: "include",
+              }
+            );
+            let a: any = await res.json();
+            if (a.result == true) {
+              const res2 = await fetch(
+                "https://cinemaguide.skillbox.cc/profile",
+                {
+                  method: "GET",
+                  credentials: "include",
+                  headers: { "Content-Type": "application/json" },
+                  cache: "no-store",
+                }
+              );
+              if (res2.ok) {
+                let lol = await res2.json();
+                console.log(lol);
+                dispatch(authSlice.actions.authUserData(lol));
+                dispatch(authSlice.actions.loggedIn());
+                closeModal();
+              }
+            }
           } catch (err) {
             setStatus(err);
             setSubmitting(false);
           }
+          // fetch("https://cinemaguide.skillbox.cc/auth/login", {
+          //   method: "POST",
+          //   body: JSON.stringify(reqValues),
+          //   headers: { "Content-Type": "application/json" },
+          //   cache: "no-store",
+          //   credentials: "include",
+          // })
+          //   .then(() => {
+          //     return fetch("https://cinemaguide.skillbox.cc/profile", {
+          //       method: "GET",
+          //     });
+          //   })
+          //   .then((data) => console.log(data));
         }}
       >
         {({ status }) => (
