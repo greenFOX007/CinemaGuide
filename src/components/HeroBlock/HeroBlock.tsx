@@ -47,7 +47,7 @@ export default function HeroBlock() {
     if (isAuthenticated && data) {
       return addFavoritesHandler({ id: String(data.id) });
     } else {
-      router.push("/login");
+      router.push("/login", { scroll: false });
     }
   };
 
