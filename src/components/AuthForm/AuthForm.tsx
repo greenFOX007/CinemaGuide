@@ -8,11 +8,12 @@ import Input from "@/shared/components/Input/Input";
 import PrimeryButton from "@/shared/components/PrimeryButton/PrimeryButton";
 import Spiner from "@/shared/components/Spiner/Spiner";
 import { Formik, Form } from "formik";
-import { useEffect } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 
 export default function AuthForm({ closeModal }: { closeModal: () => void }) {
   const dispatch = useDispatch();
+  const [isLogin, setIslogin] = useState<boolean>(false);
 
   const [
     loginHandler,
@@ -23,92 +24,39 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
     },
   ] = useLoginMutation();
 
-  // useEffect(() => {
-  //   if (isSuccessLogin) {
-  //     getAuthUser().then((data) => {
-  //       if (data.data) {
-  //         dispatch(authSlice.actions.authUserData(data?.data));
-  //         dispatch(authSlice.actions.loggedIn());
-  //         closeModal();
-  //       }
-  //     });
-  //   }
-  // }, [isSuccessLogin]);
-
   const [getAuthUser] = useLazyGetAuthUserQuery();
   return (
     <div className="opacity-0-0 transition-all duration-700">
       <Formik
         initialValues={{ email: "", password: "" }}
         onSubmit={async (value, { setSubmitting, setStatus }) => {
-          const reqValues = {
-            email: value.email,
-            password: value.password,
-          };
           try {
-            //   setSubmitting(true);
-            // const reqValues = {
-            //   email: value.email,
-            //   password: value.password,
-            // };
+            setSubmitting(true);
+            const reqValues = {
+              email: value.email,
+              password: value.password,
+            };
 
-            //   let req = await loginHandler({ data: reqValues });
-            //   // console.log(isLoadingLogin);
-            //   // if (isSuccessLogin) {
-            //   //   let authUserResponse = await getAuthUser();
-
-            //   //   if (authUserResponse.data) {
-            //   //     dispatch(authSlice.actions.authUserData(authUserResponse.data));
-            //   //     dispatch(authSlice.actions.loggedIn());
-            //   //     closeModal();
-            //   //   }
-            //   // }
-            const res = await fetch(
-              "https://cinemaguide.skillbox.cc/auth/login",
-              {
-                method: "POST",
-                body: JSON.stringify(reqValues),
-                headers: { "Content-Type": "application/json" },
-                cache: "no-store",
-                credentials: "include",
-              }
-            );
-            let a: any = await res.json();
-            if (a.result == true) {
-              const res2 = await fetch(
-                "https://cinemaguide.skillbox.cc/profile",
-                {
-                  method: "GET",
-                  credentials: "include",
-                  headers: { "Content-Type": "application/json" },
-                  cache: "no-store",
-                }
-              );
-              if (res2.ok) {
-                let lol = await res2.json();
-                console.log(lol);
-                dispatch(authSlice.actions.authUserData(lol));
-                dispatch(authSlice.actions.loggedIn());
-                closeModal();
-              }
+            let res = await loginHandler({ data: reqValues });
+            if (res.data) {
+              setIslogin(true);
             }
+            // .unwrap()
+            // .then(async () => {
+            // let authUserResponse = await getAuthUser();
+
+            // if (authUserResponse.data) {
+            //   dispatch(
+            //     authSlice.actions.authUserData(authUserResponse.data)
+            //   );
+            //   dispatch(authSlice.actions.loggedIn());
+            //   closeModal();
+            // }
+            // });
           } catch (err) {
             setStatus(err);
             setSubmitting(false);
           }
-          // fetch("https://cinemaguide.skillbox.cc/auth/login", {
-          //   method: "POST",
-          //   body: JSON.stringify(reqValues),
-          //   headers: { "Content-Type": "application/json" },
-          //   cache: "no-store",
-          //   credentials: "include",
-          // })
-          //   .then(() => {
-          //     return fetch("https://cinemaguide.skillbox.cc/profile", {
-          //       method: "GET",
-          //     });
-          //   })
-          //   .then((data) => console.log(data));
         }}
       >
         {({ status }) => (
@@ -132,6 +80,27 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
             <PrimeryButton type="submit" customStyles="w-full">
               {isLoadingLogin ? <Spiner /> : "Войти"}
             </PrimeryButton>
+            {isLogin && (
+              <PrimeryButton
+                onClick={async () => {
+                  try {
+                    let authUserResponse = await getAuthUser();
+
+                    if (authUserResponse.data) {
+                      dispatch(
+                        authSlice.actions.authUserData(authUserResponse.data)
+                      );
+                      dispatch(authSlice.actions.loggedIn());
+                      closeModal();
+                    }
+                  } catch (err) {
+                    console.log(err);
+                  }
+                }}
+              >
+                Закрыть
+              </PrimeryButton>
+            )}
             <div className="flex justify-center mt-6 relative">
               {status?.status === 400 && (
                 <p className="text-rose-600 text-sm text-center absolute -top-5 ">
