@@ -35,7 +35,7 @@ export default function AuthForm({ closeModal }: { closeModal: () => void }) {
               password: value.password,
             };
 
-            let req = await loginHandler({ data: reqValues })
+            await loginHandler({ data: reqValues })
               .unwrap()
               .then(async () => {
                 let authUserResponse = await getAuthUser();
