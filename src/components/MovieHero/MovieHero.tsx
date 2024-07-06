@@ -40,7 +40,7 @@ export default function MovieHero({ id }: { id: number }) {
     if (isAuthenticated) {
       return addFavoritesHandler({ id: String(id) });
     } else {
-      router.push("/login");
+      router.push("/login", { scroll: false });
     }
   };
 

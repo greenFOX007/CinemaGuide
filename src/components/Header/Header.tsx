@@ -33,6 +33,7 @@ export default function Header() {
           <SearchPanel />
           <div className="hidden max-lg:flex items-center">
             <Link
+              scroll={false}
               href={isAuthenticated ? "/account" : "/login"}
               className="group bg-transparent outline-none borde-0"
             >
@@ -45,6 +46,7 @@ export default function Header() {
           </div>
         </div>
         <Link
+          scroll={false}
           href={isAuthenticated ? "/account" : "/login"}
           className={`${
             pathname === "/account" || pathname === "/account/settings"
